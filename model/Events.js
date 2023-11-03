@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const Schema = mongoose.Schema
 const eventSchema = mongoose.Schema({
     name: {
         type: String,
@@ -9,11 +9,15 @@ const eventSchema = mongoose.Schema({
     end:Date,
     description: String,
     address: String,
-    organizer: { type: Schema.Types.ObjectId, ref: 'Organization' },
+    // status: {
+    //     type: String,
+    //     enum: ['ongoing','' ,'Canceled'],
+    //     default: 'ongoing',
+    // },
+    organizer: { type: Schema.Types.ObjectId, ref: 'user' },
     interested: [{ type: Schema.Types.ObjectId, ref: 'User' }], // later for web scraping interface
     going: [{ type: Schema.Types.ObjectId, ref: 'User' }], // later for web scraping interface
 
 })
 
-const Event = mongoose.model("Event",eventSchema);
-module.exports = Event ;
+module.exports = mongoose.model("Event",eventSchema);
