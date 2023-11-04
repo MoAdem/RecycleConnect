@@ -6,20 +6,16 @@ const Event = require("../model/Events");
 // item donation
 exports.item_donation = async (req, res) => {
   try {
-    // Extract donation details from the request body
     const { organizationId, eventId, items, isAnonymous } = req.body;
 
-    // Validate required fields
     if (!organizationId && !eventId) {
       return res.status(400).json({ error: 'Organization ID or Event ID is required' });
     }
 
-    // Validate items
     if (!items || items.length === 0) {
       return res.status(400).json({ error: 'Items to donate are required' });
     }
 
-    // Create the donation
     const donation = new Donation({
       items,
       isAnonymous,
@@ -32,7 +28,6 @@ exports.item_donation = async (req, res) => {
 
     res.status(201).json({ success: true, donation });
   } catch (error) {
-    // Handle errors
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -46,7 +41,6 @@ exports.user_donations = async (req, res) => {
 
     res.status(200).json({ success: true, donations });
   } catch (error) {
-    // Handle errors
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -55,9 +49,8 @@ exports.user_donations = async (req, res) => {
 // org donations received
 exports.org_donations = async (req, res) => {
   try {
-    const organizationId = req.params.organizationId; // Extract organization ID from route parameters
+    const organizationId = req.params.organizationId; 
 
-    // Check if organization exists
     const organization = await User.findById(organizationId);
 
     
@@ -69,7 +62,6 @@ exports.org_donations = async (req, res) => {
 
     res.status(200).json({ success: true, donations });
   } catch (error) {
-    // Handle errors
     console.error(error);
     if (error.name === 'CastError') {
       return res.status(400).json({ error: 'Invalid organization ID' });
@@ -82,9 +74,8 @@ exports.org_donations = async (req, res) => {
 // event received donations
 exports.event_donations = async (req, res) => {
   try {
-    const eventId = req.params.eventId; // Extract event ID from route parameters
+    const eventId = req.params.eventId; 
 
-    // Check if event exists
     const event = await Event.findById(eventId);
     if (!event) {
       return res.status(404).json({ error: 'Event not found' });
@@ -94,7 +85,6 @@ exports.event_donations = async (req, res) => {
 
     res.status(200).json({ success: true, donations });
   } catch (error) {
-    // Handle errors
     console.error(error);
     if (error.name === 'CastError') {
       return res.status(400).json({ error: 'Invalid event ID' });

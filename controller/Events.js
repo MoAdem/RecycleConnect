@@ -11,21 +11,36 @@ exports.event_create = async (req, res) => {
       if (!organizer || organizer.role !== 'organization') {
         return res.status(403).json({ error: 'Unauthorized access' });
       }
-  
       const { nameEvent, descriptionEvent, startEvent, endEvent, addressEvent } = req.body;
-      //cant be empty
+
+      // Check if any of the required fields is missing
       if (!nameEvent || !descriptionEvent || !startEvent || !endEvent || !addressEvent) {
+        console.log(PhotoEvent)
+        console.log(startEvent)
+        console.log(endEvent)
         return res.status(400).json({ error: 'All fields are required' });
       }
-  
+      // const { nameEvent, descriptionEvent, startEvent, endEvent, addressEvent } = req.body;
+      // //cant be empty
+      // if (!nameEvent || !descriptionEvent || !startEvent || !endEvent || !addressEvent) {
+      //   return res.status(400).json({ error: 'All fields are required' });
+      // }
+      const photos = req.files.map(
+        (file) =>
+            req.protocol + "://" + req.get("host") + "/uploads/" + file.filename
+    );
+
       const event = new Event({
         nameEvent,
         descriptionEvent,
         startEvent,
         endEvent,
         addressEvent,
+        PhotoEvent: photos,
         organizer: organizerId,
       });
+      
+
   
       await event.save();
   
