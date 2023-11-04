@@ -12,18 +12,18 @@ exports.event_create = async (req, res) => {
         return res.status(403).json({ error: 'Unauthorized access' });
       }
   
-      const { name, description, start, end, address } = req.body;
+      const { nameEvent, descriptionEvent, startEvent, endEvent, addressEvent } = req.body;
       //cant be empty
-      if (!name || !description || !start || !end || !address) {
+      if (!nameEvent || !descriptionEvent || !startEvent || !endEvent || !addressEvent) {
         return res.status(400).json({ error: 'All fields are required' });
       }
   
       const event = new Event({
-        name,
-        description,
-        start,
-        end,
-        address,
+        nameEvent,
+        descriptionEvent,
+        startEvent,
+        endEvent,
+        addressEvent,
         organizer: organizerId,
       });
   
@@ -141,7 +141,7 @@ exports.event_update = (req, res) => {
 exports.event_delete = async (req, res) => {
   try {
     const eventId = req.params.id;
-    const organizerId = '6544ea08e814996f0b247bs3'//const organizerId = req.user.id; 
+    const organizerId = '6544ea08e814996f0b247b63'//const organizerId = req.user.id; 
 
     const event = await Event.findById(eventId);
 
