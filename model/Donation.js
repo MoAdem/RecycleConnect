@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
-
-const donationSchema = new Schema({
-    date: { 
+const Schema = mongoose.Schema
+const donationSchema = mongoose.Schema({
+    dateDonation: { 
         type: Date,
         default: Date.now 
     },
     
-    // status: {
+    // statusDontaion: {
     //     type: String,
     //     enum: ['Pending', 'Processed', 'Cancelled'],
     //     default: 'Pending',
@@ -14,7 +14,7 @@ const donationSchema = new Schema({
 
     isAnonymous: { type: Boolean, default: false }, 
     donor: { type: Schema.Types.ObjectId, ref: 'User' },
-    amount: Number,
+    amountDonation: Number,
     paymentMethod: String, // Payment method (carte bancaire, paypal ..)
     items: [{ type: Schema.Types.ObjectId, ref: 'Item' }], 
     organization: { type: Schema.Types.ObjectId, ref: 'Organization' }, 
@@ -22,5 +22,4 @@ const donationSchema = new Schema({
     
   })
 
-const Donation = mongoose.model("Donation",donationSchema);
-module.exports = Donation ;
+  module.exports = mongoose.model("Donation",donationSchema);

@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const connectToDatabase = require('./database');
 //routes
 const eventRouter = require('./routes/events');
+const donationRouter = require('./routes/donation');
 //test user
 const userRoutes = require('./routes/user');
 
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/api/events',eventRouter)
+app.use('/api/donation',donationRouter)
 
 //test user
 // app.use('/user', userRoutes);
