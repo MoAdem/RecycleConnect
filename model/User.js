@@ -11,16 +11,23 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  address: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   password: {
     type: String,
     required: true,
   },
+
   role: {
     type: String,
-    enum: ['organization', 'regular'], // Add other roles as needed
-    default: 'regular',
+    enum: ['organization', 'client'], // Add other roles as needed
+    default: 'client',
   },
+  
 });
 
 const User = mongoose.model('User', userSchema);
-module.exports = User;
+module.exports = User; 
