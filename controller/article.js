@@ -3,12 +3,22 @@ const Article = require('../model/Article');
 
 exports.createArticle = async (req, res) => {
   try {
-    const { NomArticle, PhotoArticle, DescriptionArticle, EtatArticle, CategorieId } = req.body;
+    const { NomArticle, DescriptionArticle, EtatArticle, CategorieId } = req.body;
 
-    if (!NomArticle || !PhotoArticle || !DescriptionArticle || !EtatArticle || !CategorieId) {
+    if (!NomArticle || !DescriptionArticle || !EtatArticle || !CategorieId) {
       return res.status(400).json({ error: 'Champs vides !' });
     } 
-    const newArticle = new Article({PhotoArticle, NomArticle, DescriptionArticle, EtatArticle, Categorie: CategorieId});
+
+    const photos = req.files.map(
+      (file) =>
+          req.protocol + "://" + req.get("host") + "/uploads/" + file.filename
+      );
+    const newArticle = new Article
+    ({PhotoArticle: photos, 
+      NomArticle, 
+      DescriptionArticle, 
+      EtatArticle, 
+      Categorie: CategorieId});
     await newArticle.save();
     res.json(newArticle);
   } catch (error) {
