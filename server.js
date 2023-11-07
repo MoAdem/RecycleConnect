@@ -25,5 +25,5 @@ app.use('/api/categories', categorieRoutes);
 
 
 const server = app.listen(port, () =>
-  console.log(`Server listening on port: ${port}`)
+  console.log(`Server listening  and working on port: ${port}`)
 );
