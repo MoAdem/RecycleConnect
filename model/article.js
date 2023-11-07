@@ -5,7 +5,7 @@ const articleSchema = new mongoose.Schema({
   NomArticle: String,
   DescriptionArticle: String,
   EtatArticle: String,
-  categorie: { type: Schema.Types.ObjectId, ref: 'Categorie' },
+  Categorie: { type: Schema.Types.ObjectId, ref: 'Categorie' },
 });
 
 module.exports = mongoose.model('Article', articleSchema);

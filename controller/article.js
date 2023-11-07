@@ -3,9 +3,14 @@ const Article = require('../model/Article');
 
 exports.createArticle = async (req, res) => {
   try {
-    const article = new Article(req.body);
-    await article.save();
-    res.json(article);
+    const { NomArticle, PhotoArticle, DescriptionArticle, EtatArticle, CategorieId } = req.body;
+
+    if (!NomArticle || !PhotoArticle || !DescriptionArticle || !EtatArticle || !CategorieId) {
+      return res.status(400).json({ error: 'Champs vides !' });
+    } 
+    const newArticle = new Article({PhotoArticle, NomArticle, DescriptionArticle, EtatArticle, Categorie: CategorieId});
+    await newArticle.save();
+    res.json(newArticle);
   } catch (error) {
     res.status(500).json({ error: 'Error creating article' });
   }

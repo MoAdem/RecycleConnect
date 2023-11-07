@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 const categorieSchema = new mongoose.Schema({
-  NomCategorie: String,
+  NomCategorie: 
+  {type: String,
+  unique: true,},
   NbreTotalArticles: Number,
 });
 
