@@ -1,6 +1,7 @@
-const User = require('../model/User');
+import User from '../model/User.js';
 
-exports.createSampleUser = async () => {
+const userController = {
+  createSampleUser: async () => {
     try {
       const sampleUser = new User({
         username: 'testuser1',
@@ -8,10 +9,13 @@ exports.createSampleUser = async () => {
         password: 'testpassword1',
         role: 'regular',
       });
-  
+
       await sampleUser.save();
       console.log('Sample user created successfully');
     } catch (error) {
       console.error('Error creating sample user:', error);
     }
-  };
+  },
+};
+
+export default userController;
