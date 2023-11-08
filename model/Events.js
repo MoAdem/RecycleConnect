@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema
+//merger
 const eventSchema = mongoose.Schema({
     nameEvent: {
         type: String,
         required: true,
+        unique: true,
     },
     startEvent:Date,
     endEvent:Date,

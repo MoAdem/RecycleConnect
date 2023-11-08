@@ -5,6 +5,7 @@ const donationSchema = mongoose.Schema({
         type: Date,
         default: Date.now 
     },
+    //merge
     
     // statusDontaion: {
     //     type: String,

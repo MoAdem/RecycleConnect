@@ -7,7 +7,7 @@ const eventRouter = require('./routes/events');
 const donationRouter = require('./routes/donation');
 //test user
 const userRoutes = require('./routes/user');
-
+//merger
 
 const app = express();
 const cors = require('cors');

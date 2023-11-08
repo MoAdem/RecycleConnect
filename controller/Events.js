@@ -1,7 +1,7 @@
 const Event = require('../model/Events');
 const User = require('../model/User');
 
-
+//merge
 //waiting for user (role and auth)
 exports.event_create = async (req, res) => {
     try {
