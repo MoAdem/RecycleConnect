@@ -12,6 +12,8 @@ import livraisonRoutes from './routes/livraison.js';
 import pointCollecteRoutes from './routes/pointCollecte.js';
 import verifierProduitRoutes from './routes/verifierProduit.js'
 import userRouter from './routes/user.js';
+import articleRoutes from'./routes/article.js';
+import categorieRoutes from'./routes/categorie.js';
 //test user
 // import userRoutes from './routes/user.js';
 //merge
@@ -35,6 +37,9 @@ app.use('/api/panier', panierRouter);
 app.use('/pointCollecte',pointCollecteRoutes);
 app.use('/livraison',livraisonRoutes);
 app.use('/verifierProduit',verifierProduitRoutes)
+
+app.use('/api/articles', articleRoutes); 
+app.use('/api/categories', categorieRoutes);
 
 app.use('/api/user',userRouter)
 

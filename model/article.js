@@ -1,6 +1,8 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema
-const articleSchema = new mongoose.Schema({
+import mongoose from "mongoose";
+const {Schema,model,Types }=mongoose;
+
+
+const articleSchema = new Schema({
   PhotoArticle: [],
   NomArticle: String,
   DescriptionArticle: String,
@@ -8,4 +10,4 @@ const articleSchema = new mongoose.Schema({
   Categorie: { type: Schema.Types.ObjectId, ref: 'Categorie' },
 });
 
-module.exports = mongoose.model('Article', articleSchema);
+export default model ('Article', articleSchema);

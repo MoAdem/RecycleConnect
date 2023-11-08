@@ -1,12 +1,27 @@
-const express = require('express');
+import express from 'express';
+import multer from 'multer';
+import upload from '../middleware/multer.js';
+
+import { createArticle, 
+         getAllArticles, 
+         getArticleById, 
+         updateArticle, 
+         deleteArticle } from '../controller/article.js'; 
+
+
 const router = express.Router();
-const article = require('../controller/article');
-const upload = require('../middleware/multer');
 
-router.post('/',upload.array('PhotoArticle'), article.createArticle);
-router.get('/', article.getAllArticles);
-router.get('/:id', article.getArticleById);
-router.put('/:id', article.updateArticle);
-router.delete('/:id', article.deleteArticle);
+router
+.route('/')
+.post(upload.array('PhotoArticle'),createArticle)
+.get(getAllArticles);
 
-module.exports = router;
+
+router
+.route('/:id')
+.get(getArticleById)
+.put(updateArticle)
+.delete(deleteArticle);
+
+
+export default router;

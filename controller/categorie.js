@@ -1,63 +1,131 @@
-const categorie = require('../model/categorie');
+import Categorie from '../model/categorie.js';
 
 
-exports.createcategorie = async (req, res) => {
-  try {
-    const { NomCategorie, NbreTotalArticles } = req.body;
+/* export function createcategorie (req, res)
+{
+     const { NomCategorie, NbreTotalArticles } = req.body;
     
-    if (!NomCategorie || !NbreTotalArticles) {
-      return res.status(400).json({ error: 'Champs vides !' });
+    if (!NomCategorie || !NbreTotalArticles) 
+    {
+      res.status(400).json({ error: 'Champs vides !' });
     }
 
-    if (NbreTotalArticles < 0) {
-      return res.status(400).json({ error: 'Nombre d\'articles négatif !' });
+    if (NbreTotalArticles < 0) 
+    {
+      res.status(400).json({ error: 'Nombre d\'articles négatif !' });
     }
 
-    const newCategorie = new categorie({ NomCategorie, NbreTotalArticles }); 
-    await newCategorie.save();
-    res.json(newCategorie);
-  } catch (error) {
-    res.status(500).json({ error: 'Error creating category' });
+    Categorie.create({
+      NomCategorie: req.body.NomCategorie,
+      NbreTotalArticles: req.body.NbreTotalArticles
+    })
+      .then((nouvcategorie) => {
+        res.status(200).json(nouvcategorie);
+      })
+      .catch(res.status(400).json({ error: 'Erreur dans la creation de la categorie' }))
+    
+}
+ */
+
+export async function createcategorie(req, res) {
+  const { NomCategorie, NbreTotalArticles } = req.body;
+ 
+  if (!NomCategorie || !NbreTotalArticles) 
+  {
+     return res.status(400).json({ error: "Champs vides !" });
   }
-};
-
-
-
-exports.getAllCategories = async (req, res) => {
+ 
+  if (NbreTotalArticles < 0) 
+  {
+     return res.status(400).json({ error: "Nombre d'articles négatif !" });
+  }
+ 
+  const existingCategory = await Categorie.findOne({ NomCategorie });
+ 
+  if (existingCategory) {
+     return res.status(400).json({ error: "Cette catégorie existe déjà !" });
+  }
+ 
   try {
-    const categories = await categorie.find();
-    res.json(categories);
+     const nouvcategorie = await Categorie.create({
+       NomCategorie: req.body.NomCategorie,
+       NbreTotalArticles: req.body.NbreTotalArticles,
+     });
+     return res.status(200).json(nouvcategorie);
   } catch (error) {
-    res.status(500).json({ error: 'Error getting categories' });
+     return res.status(400).json({ error: "Erreur dans la creation de la categorie" });
   }
-};
+ }
 
-// Get a single categorie by ID
-exports.getcategorieById = async (req, res) => {
+
+/* export async function getAllCategories (req, res) {
+  Categorie.find()
+  .then((categories) => { res.status(200).json(categories); })
+  .catch(res.status(400).json({ error: 'Erreur de l affichage de toutes categories'}))
+} */
+
+export async function getAllCategories(req, res) {
   try {
-    const categorie = await categorie.findById(req.params.id);
-    res.json(categorie);
+     const categories = await Categorie.find();
+     res.status(200).json(categories);
   } catch (error) {
-    res.status(500).json({ error: 'Error getting categorie' });
+     res.status(400).json({ error: 'Erreur de l affichage de toutes categories' });
   }
-};
+ }
 
-
-exports.updatecategorie = async (req, res) => {
+export async function getcategorieById (req, res) {
   try {
-    await categorie.findByIdAndUpdate(req.params.id, req.body);
-    res.json({ message: 'categorie updated successfully' });
+  const categorie = await Categorie.findById(req.params.id)
+   res.status(200).json(categorie); 
   } catch (error) {
-    res.status(500).json({ error: 'Error updating categorie' });
+   res.status(400).json({ error: 'Erreur de l affichage de la categorie'});
   }
-};
+}
 
 
-exports.deletecategorie = async (req, res) => {
+
+/* export function updatecategorie (req, res) {
+  Categorie.findByIdAndUpdate(req.params.id)
+  .then((categorie) => { res.status(200).json(categorie); })
+  .catch(res.status(400).json({ error: 'Erreur de modification de la categorie' }))
+}
+ */
+
+export async function updatecategorie(req, res) {
+  const { NomCategorie, NbreTotalArticles } = req.body;
+ 
+  if (!NomCategorie || !NbreTotalArticles) {
+     return res.status(400).json({ error: "Champs vides !" });
+  }
+ 
+  if (NbreTotalArticles < 0) {
+     return res.status(400).json({ error: "Nombre d'articles négatif !" });
+  }
+ 
   try {
-    await categorie.findByIdAndRemove(req.params.id);
-    res.json({ message: 'categorie deleted successfully' });
+     const existingCategory = await Categorie.findById(req.params.id);
+     if (!existingCategory) {
+       return res.status(400).json({ error: "Cette catégorie n'existe pas." });
+     }
+ 
+     existingCategory.NomCategorie = NomCategorie;
+     existingCategory.NbreTotalArticles = NbreTotalArticles;
+ 
+     const updatedCategory = await existingCategory.save();
+     return res.status(200).json(updatedCategory);
   } catch (error) {
-    res.status(500).json({ error: 'Error deleting categorie' });
+     return res.status(400).json({ error: error.message || "Erreur de modification de la categorie" });
   }
-};
+ }
+
+
+
+
+
+export async function deletecategorie (req, res) {
+  try {
+  const categorie = await Categorie.findByIdAndRemove(req.params.id);
+  res.json({ message: 'categorie supprimée' });
+  }
+  catch(error){ res.status(400).json({ error: 'Erreur de la suppression de la categorie' });}
+}
