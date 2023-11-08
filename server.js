@@ -2,16 +2,23 @@ import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
 import connectToDatabase from './database.js';
+import { notFoundError,errorHandler } from './middleware/error-handler.js';
 //routes
 import eventRouter from './routes/events.js';
 import donationRouter from './routes/donation.js';
+import reservationRouter from './routes/reservation.js';
+import panierRouter from './routes/panier.js';
+import livraisonRoutes from './routes/livraison.js';
+import pointCollecteRoutes from './routes/pointCollecte.js';
+import verifierProduitRoutes from './routes/verifierProduit.js'
+import userRouter from './routes/user.js';
 //test user
-import userRoutes from './routes/user.js';
+// import userRoutes from './routes/user.js';
 //merge
 
 const app = express();
 import cors from 'cors';
-import { createSampleUser } from "./controller/User.js";
+// import { createSampleUser } from "./controller/User.js";
 
 const port = process.env.PORT;
 
@@ -21,6 +28,23 @@ app.use(bodyParser.json());
 
 app.use('/api/events', eventRouter);
 app.use('/api/donation', donationRouter);
+
+app.use('/api/reservation', reservationRouter);
+app.use('/api/panier', panierRouter);
+
+app.use('/pointCollecte',pointCollecteRoutes);
+app.use('/livraison',livraisonRoutes);
+app.use('/verifierProduit',verifierProduitRoutes)
+
+app.use('/api/user',userRouter)
+
+
+
+
+
+app.use(notFoundError);
+
+app.use(errorHandler);
 
 //test user
 // app.use('/user', userRoutes);

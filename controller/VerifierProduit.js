@@ -1,4 +1,4 @@
-/*import { validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 import verifierProduit from "../model/VerifierProduit.js";
 import livraison from "../model/Livraison.js";
 import nodemailer from "nodemailer"
@@ -70,4 +70,4 @@ export function verfi (req,res){
 
     }
 
-}*/
+}
