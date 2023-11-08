@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
 
-const panierSchema = mongoose.Schema({
+const panierSchema = new mongoose.Schema({
   totalPanier: {
     type: Number,
     required: true,
@@ -10,7 +9,8 @@ const panierSchema = mongoose.Schema({
     type: String,
     required: true,
   },
- 
 });
 
-module.exports = mongoose.model("Panier", panierSchema);
+const Panier = mongoose.model('Panier', panierSchema);
+
+export default Panier;

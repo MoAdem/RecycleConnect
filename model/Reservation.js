@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
 
-const reservationSchema = mongoose.Schema({
+const reservationSchema = new mongoose.Schema({
   dateReservation: {
     type: Date,
     required: true,
@@ -19,7 +18,8 @@ const reservationSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-
 });
 
-module.exports = mongoose.model("Reservation", reservationSchema);
+const Reservation = mongoose.model('Reservation', reservationSchema);
+
+export default Reservation;
