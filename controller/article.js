@@ -1,67 +1,77 @@
-const Article = require('../model/Article');
+import Article from "../model/article.js";
 
 
-exports.createArticle = async (req, res) => {
-  try {
-    const { NomArticle, DescriptionArticle, EtatArticle, CategorieId } = req.body;
+export async function createArticle(req, res) {
+ const { NomArticle, DescriptionArticle, EtatArticle, CategorieId } = req.body;
 
-    if (!NomArticle || !DescriptionArticle || !EtatArticle || !CategorieId) {
-      return res.status(400).json({ error: 'Champs vides !' });
-    } 
+ if (!NomArticle || !DescriptionArticle || !EtatArticle || !CategorieId) {
+    res.status(400).json({ error: 'Champs vides !' });
+ }
 
-    const photos = req.files.map(
-      (file) =>
-          req.protocol + "://" + req.get("host") + "/uploads/" + file.filename
-      );
-    const newArticle = new Article
+ const photos = req.files.map(
+    (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename
+ );
+
+ const nouvArticle = await Article.create
     ({PhotoArticle: photos, 
-      NomArticle, 
+      NomArticle,
       DescriptionArticle, 
       EtatArticle, 
-      Categorie: CategorieId});
-    await newArticle.save();
-    res.json(newArticle);
-  } catch (error) {
-    res.status(500).json({ error: 'Error creating article' });
-  }
-};
+      Categorie: CategorieId})
+    .catch(err => { 
+      res.status(400).json({ error: 'Erreur dans la creation de l article' }); 
+    });
 
-// Get all articles
-exports.getAllArticles = async (req, res) => {
+ if (nouvArticle) {
+    res.status(200).json(nouvArticle);
+ }
+}
+
+
+
+export async function getAllArticles(req, res) {
   try {
-    const articles = await Article.find();
-    res.json(articles);
-  } catch (error) {
-    res.status(500).json({ error: 'Error getting articles' });
-  }
-};
+  const articles = await Article.find();
+  res.status(200).json(articles);
+} catch (error) {
+  res.status(400).json({ error: 'Erreur de l affichage de tous les articles' });
+}
+}
 
-// Get a single article by ID
-exports.getArticleById = async (req, res) => {
+
+export async function getArticleById(req, res){
   try {
     const article = await Article.findById(req.params.id);
-    res.json(article);
+    res.status(200).json(article);
   } catch (error) {
-    res.status(500).json({ error: 'Error getting article' });
+    res.status(400).json({ error: 'Erreur de l affichage de l article'});
   }
-};
+}
 
-// Update an article by ID
-exports.updateArticle = async (req, res) => {
-  try {
-    await Article.findByIdAndUpdate(req.params.id, req.body);
-    res.json({ message: 'Article updated successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Error updating article' });
-  }
-};
 
-// Delete an article by ID
-exports.deleteArticle = async (req, res) => {
+export async function updateArticle (req, res){
   try {
-    await Article.findByIdAndRemove(req.params.id);
-    res.json({ message: 'Article deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Error deleting article' });
+    const existingarticle = await Article.findById(req.params.id);
+    existingarticle.PhotoArticle = req.files.map(
+      (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
+    existingarticle.NomArticle = req.body.NomArticle; 
+    existingarticle.DescriptionArticle = req.body.DescriptionArticle;
+    existingarticle.EtatArticle = req.body.EtatArticle;
+    existingarticle.Categorie = req.body.CategorieId;
+    const article = await existingarticle.save();
+    res.status(200).json(article);
+
+  }catch (error) {
+    res.status(400).json({ error: 'Erreur de modification de l article' })
   }
-};
+}
+
+
+export async function deleteArticle (req, res){
+  try {
+  const article = await Article.findByIdAndRemove(req.params.id);
+  res.json({ message: 'Article supprimé' });
+  }catch(error) {
+    res.status(400).json({ error: 'Erreur de la suppression de l article' });
+  }
+}

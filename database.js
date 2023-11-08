@@ -1,8 +1,10 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const connectToDatabase = async () => {
-  try {
+ try {
     const mongoURI = process.env.MONGO_URI;
 
     await mongoose.connect(mongoURI, {
@@ -11,9 +13,9 @@ const connectToDatabase = async () => {
     });
 
     console.log('Connected to MongoDB Atlas RecycleConnect');
-  } catch (error) {
+ } catch (error) {
     console.error('MongoDB connection error:', error.message);
-  }
+ }
 };
 
-module.exports = connectToDatabase;
+export default connectToDatabase;

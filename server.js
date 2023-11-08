@@ -1,17 +1,18 @@
-const express = require("express");
-const path = require('path');
-const bodyParser = require('body-parser');
-const connectToDatabase = require('./database');
+import express from 'express';
+import path from 'path';
+import bodyParser from 'body-parser';
+import connectToDatabase from './database.js';
+
+
 //routes
-const articleRoutes = require('./routes/article');
-const categorieRoutes = require('./routes/categorie');
-//test user
-const userRoutes = require('./routes/user');
+import articleRoutes from'./routes/article.js';
+import categorieRoutes from'./routes/categorie.js';
+
 
 
 const app = express();
-const cors = require('cors');
-const { createSampleUser } = require("./controller/User");
+import cors from 'cors';
+
 
 const port = process.env.PORT;
 
@@ -25,5 +26,5 @@ app.use('/api/categories', categorieRoutes);
 
 
 const server = app.listen(port, () =>
-  console.log(`Server listening  and working on port: ${port}`)
+  console.log(`Server listening on port: ${port}`)
 );
