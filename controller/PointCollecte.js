@@ -55,7 +55,7 @@ export function updatePcByName(req, res) {
         .then((newpointCollecte) => {
   
   
-          // MMAJ les champs individuellement
+          // MMAJ les champs indiv
           if (req.body.address_mail_Pc) {
             newpointCollecte.address_mail_Pc = req.body.address_mail_Pc;
           }

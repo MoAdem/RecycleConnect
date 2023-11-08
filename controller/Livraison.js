@@ -6,12 +6,12 @@ export function addliv (req,res){
      }else{
          Livraison
          .create({
+             Nom_Article:req.body.Nom_Article,
              Nom_Client: req.body.Nom_Client,
              address_mail_Client: req.body.address_mail_Client,
-             address_Client: req.body.address_Client,
              numero_Client:req.body.numero_Client,
-             code_postal:req.body.code_postal,
-             id_Pc:req.body.id_Pc,
+             ville:req.body.ville,
+             address_Client: req.body.address_Client,
          })
          .then((newlivraison)=> {
              res.status(200).json(newlivraison)
@@ -23,7 +23,7 @@ export function addliv (req,res){
  }
  
  export function getliv(req,res){
-    livraison
+    Livraison
     .find({})
     .then(docs => {
         res.status(200).json(docs);
@@ -34,7 +34,7 @@ export function addliv (req,res){
 }
 
 export function getOnceliv(req,res) {
-    livraison
+    Livraison
     .findOne({"Nom_Client":req.params.Nom_Client})
     .then(doc =>{
         res.status(200).json(doc);
@@ -45,7 +45,7 @@ export function getOnceliv(req,res) {
 }
 
 export function deleteOnceliv(req,res){
-    livraison
+    Livraison
     .findOneAndDelete({"Nom_Client":req.params.Nom_Client})
     .then(doc => {
         res.status(200).json(doc);
@@ -56,7 +56,7 @@ export function deleteOnceliv(req,res){
 }
 
 export function deleteAllliv(req,res){
-    livraison
+    Livraison
     .deleteMany({})
     .then(doc=>{
         res.status(200).json(doc);
@@ -72,25 +72,31 @@ export function updateliv(req, res) {
     } else {
       const { Nom_Client } = req.params;
   
-      livraison
+      Livraison
         .findOne({ Nom_Client: Nom_Client })
         .then((newlivraison) => {
+
+          if (req.body.Nom_Article) {
+            newlivraison.Nom_Article=req.body.Nom_Article   
+          }
   
+          if (req.body.Nom_Client) {
+            newlivraison.Nom_Client=req.body.Nom_Client    
+          }
   
           if (req.body.address_mail_Client) {
             newlivraison.address_mail_Client = req.body.address_mail_Client;
           }
-          if (req.body.address_Client) {
-            newlivraison.address_Client = req.body.address_Client;
-          }
+
           if (req.body.numero_Client) {
             newlivraison.numero_Client = req.body.numero_Client;
           }
-          if (req.body.code_postal) {
-            newlivraison.code_postal=req.body.code_postal       
+
+          if (req.body.ville){
+            newlivraison.ville=req.body.ville
           }
-          if (req.body.id_Pc){
-            newlivraison.id_Pc=req.body.id_Pc
+          if (req.body.address_Client) {
+            newlivraison.address_Client = req.body.address_Client;
           }
   
           newlivraison

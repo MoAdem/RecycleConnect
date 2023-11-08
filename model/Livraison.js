@@ -3,6 +3,10 @@ const {Schema,model,Types }=mongoose;
 
 const livraisonSchema = new Schema(
     {
+        Nom_Article:{
+            type:String,
+            required:true
+        },
         Nom_Client:{
             type:String,
             required:true
@@ -11,23 +15,19 @@ const livraisonSchema = new Schema(
             type:String,
             required:true
         },
-        address_Client:{
-            type:String,
-            required:true
-        },
+
         numero_Client:{
             type:Number,
             required:true
         },
-        code_postal:{
-            type:Number,
+        ville:{
+            type:String,
             required:true
         },
-        id_Pc:{
-            type: Types.ObjectId,
-            ref:'pointCollecte',
+        address_Client:{
+            type:String,
             required:true
-        }
+        },
     },
     {
         timestamps:true
