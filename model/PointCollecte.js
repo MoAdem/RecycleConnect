@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+/*import mongoose from "mongoose";
 const {Schema,model}= mongoose;
 
 const pointCollecteSchema= new Schema(
@@ -29,4 +29,4 @@ const pointCollecteSchema= new Schema(
         timestamps: true
     }
 );
-export default model ('pointCollecte',pointCollecteSchema);
+export default model ('pointCollecte',pointCollecteSchema);*/

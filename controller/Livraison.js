@@ -1,4 +1,4 @@
-import { validationResult } from "express-validator";
+/*import { validationResult } from "express-validator";
 import Livraison from "../model/Livraison.js";
 export function addliv (req,res){
     if(!validationResult(req).isEmpty()){
@@ -112,4 +112,4 @@ export function updateliv(req, res) {
           res.status(500).json({ error: err });
         });
     }
-  }
+  }*/

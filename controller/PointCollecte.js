@@ -1,4 +1,4 @@
-import { validationResult } from "express-validator";
+/*import { validationResult } from "express-validator";
 import PointCollecte from "../model/PointCollecte.js";
 
 export function addPc (req,res){
@@ -103,4 +103,4 @@ export function deleteAllPc(req,res){
     .catch(err=> {
         res.status(500).json({error:err});
     });
-}
+}*/

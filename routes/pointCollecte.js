@@ -1,4 +1,4 @@
-import express from 'express';
+/*import express from 'express';
 import { body } from 'express-validator'
 import multer from '../middleware/multer-config.js';
 import { addPc, deleteAllPc, deleteOncePc, getOncePc, getPc, updatePcByName } from '../controller/PointCollecte.js';
@@ -25,4 +25,4 @@ router
 
 
 
-export default router;
+export default router;*/

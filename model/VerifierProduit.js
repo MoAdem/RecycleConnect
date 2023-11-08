@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+/*import mongoose from "mongoose";
 const {Schema,model,Types }=mongoose;
 const verifierProduitSchema= new Schema(
     {
@@ -16,4 +16,4 @@ const verifierProduitSchema= new Schema(
         timestamps:true
     }
 );
-export default model ('verifierProduit',verifierProduitSchema)
+export default model ('verifierProduit',verifierProduitSchema)*/
