@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const User = require('../model/User');
+import User from '../model/User.js';
 
 // Route to create a sample user
 router.post('/createSampleUser', async (req, res) => {
@@ -20,4 +20,4 @@ router.post('/createSampleUser', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
