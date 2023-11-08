@@ -36,7 +36,7 @@ exports.item_donation = async (req, res) => {
 // all user donations
 exports.user_donations = async (req, res) => {
   try {
-    const userId =req.user.id
+    const userId ="654b7808a54c93e35e3aea4d" //req.user.id
     const donations = await Donation.find({ donor: userId });
 
     res.status(200).json({ success: true, donations });

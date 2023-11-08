@@ -10,6 +10,10 @@ const categorieRoutes = require('./routes/categorie');
 const userRouter = require('./routes/user');
 const reservationrouter = require ('./routes/reservation');
 const panierrouter = require ('./routes/panier');
+
+// import livraisonRoutes from './routes/livraison.js';
+// import pointCollecteRoutes from './routes/pointCollecte.js';
+// import verifierProduitRoutes from './routes/verifierProduit.js'
 //test user
 const userRoutes = require('./routes/user');
 //merge
@@ -35,10 +39,15 @@ app.use('/api/user',userRouter)
 app.use('/api/panier',panierrouter)
 app.use('/api/reservation',reservationrouter)
 
+// app.use('/pointCollecte',pointCollecteRoutes);
+// app.use('/livraison',livraisonRoutes);
+// app.use('/verifierProduit',verifierProduitRoutes)
+
 
 //test user
 // app.use('/user', userRoutes);
 // createSampleUser();
+
 
 
 
