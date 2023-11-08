@@ -1,14 +1,18 @@
-const express = require('express');
+
+import express from 'express';
 const router = express.Router();
-const event_controller = require('../controller/Events')
-const upload = require('../middleware/multer');
+import multer from 'multer';
+import eventController from '../controller/Events.js';
+import upload from '../middleware/multer.js';
 
+
+//merg
 // routes
-router.post('/create',upload.array('PhotoEvent'), event_controller.event_create);
-router.get('/',event_controller.all_events)
-router.get('/:id',event_controller.event_byid)
-router.get('/organizer/:organizerId',event_controller.event_byorg)
-router.put('/:id',event_controller.event_update)
-router.delete('/delete/:id', event_controller.event_delete);
+router.post('/create',upload.array('PhotoEvent'), eventController.event_create);
+router.get('/',eventController.all_events)
+router.get('/:id',eventController.event_byid)
+router.get('/organizer/:organizerId',eventController.event_byorg)
+router.put('/:id',eventController.event_update)
+router.delete('/delete/:id', eventController.event_delete);
 
-module.exports = router;
+export default router;

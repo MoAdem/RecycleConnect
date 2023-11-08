@@ -1,12 +1,12 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const donation_controller = require('../controller/Donation')
+import donationController from '../controller/Donation.js';
 
 // routes
-router.post('/item', donation_controller.item_donation)
-router.post('/money', donation_controller.money_donation)
-router.get('/user',donation_controller.user_donations)
-router.get('/org/:organizationId',donation_controller.org_donations)
-router.get('/event/:eventId',donation_controller.event_donations)
+router.post('/item', donationController.item_donation);
+router.post('/money', donationController.money_donation);
+router.get('/user', donationController.user_donations);
+router.get('/org/:organizationId', donationController.org_donations);
+router.get('/event/:eventId', donationController.event_donations);
 
-module.exports = router;
+export default router;

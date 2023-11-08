@@ -1,10 +1,10 @@
-const Donation = require("../model/Donation");
-const User = require("../model/User");
-const Event = require("../model/Events");
-
+import Donation from "../model/Donation.js";
+import User from "../model/User.js";
+import Event from "../model/Events.js";
 
 // item donation
-exports.item_donation = async (req, res) => {
+const donationController = {
+ item_donation : async (req, res) => {
   try {
     const { organizationId, eventId, items, isAnonymous } = req.body;
 
@@ -19,7 +19,7 @@ exports.item_donation = async (req, res) => {
     const donation = new Donation({
       items,
       isAnonymous,
-      donor:"6544f9baeed3721e4513c03e",//req.user.id, 
+      donor: "6544f9baeed3721e4513c03e", //req.user.id, 
       organization: organizationId,
       event: eventId,
     });
@@ -31,12 +31,12 @@ exports.item_donation = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
-};
+},
 
 // all user donations
-exports.user_donations = async (req, res) => {
+ user_donations : async (req, res) => {
   try {
-    const userId ="6544f9baeed3721e4513c03e"//req.user.id
+    const userId = "6544f9baeed3721e4513c03e"; //req.user.id
     const donations = await Donation.find({ donor: userId });
 
     res.status(200).json({ success: true, donations });
@@ -44,16 +44,15 @@ exports.user_donations = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
-};
+},
 
 // org donations received
-exports.org_donations = async (req, res) => {
+ org_donations : async (req, res) => {
   try {
-    const organizationId = req.params.organizationId; 
+    const organizationId = req.params.organizationId;
 
     const organization = await User.findById(organizationId);
 
-    
     if (!organization || organization.role !== 'organization') {
       return res.status(404).json({ error: 'Organization not found' });
     }
@@ -68,13 +67,12 @@ exports.org_donations = async (req, res) => {
     }
     res.status(500).json({ error: 'Internal server error' });
   }
-};
-
+},
 
 // event received donations
-exports.event_donations = async (req, res) => {
+ event_donations : async (req, res) => {
   try {
-    const eventId = req.params.eventId; 
+    const eventId = req.params.eventId;
 
     const event = await Event.findById(eventId);
     if (!event) {
@@ -91,37 +89,37 @@ exports.event_donations = async (req, res) => {
     }
     res.status(500).json({ error: 'Internal server error' });
   }
-};
-
+},
 
 // money donation
-exports.money_donation = async (req, res) => {
-    try {
-      const { organizationId, eventId, amount, paymentMethod, isAnonymous } = req.body;
-  
-      if (!organizationId && !eventId) {
-        return res.status(400).json({ error: 'Organization ID or Event ID is required' });
-      }
-  
-      if (!amount || amount <= 0) {
-        return res.status(400).json({ error: 'Invalid donation amount' });
-      }
-  
-      const donation = new Donation({
-        amountDonation: amount,
-        paymentMethod,
-        isAnonymous,
-        donor:"6544f9baeed3721e4513c03e",//req.user.id, 
-        organization: organizationId,
-        event: eventId,
-      });
-  
-      await donation.save();
-  
-      res.status(201).json({ success: true, donation });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+ money_donation : async (req, res) => {
+  try {
+    const { organizationId, eventId, amount, paymentMethod, isAnonymous } = req.body;
+
+    if (!organizationId && !eventId) {
+      return res.status(400).json({ error: 'Organization ID or Event ID is required' });
     }
-  };
-  
+
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: 'Invalid donation amount' });
+    }
+
+    const donation = new Donation({
+      amountDonation: amount,
+      paymentMethod,
+      isAnonymous,
+      donor: "6544f9baeed3721e4513c03e", //req.user.id, 
+      organization: organizationId,
+      event: eventId,
+    });
+
+    await donation.save();
+
+    res.status(201).json({ success: true, donation });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+}
+export default donationController;
