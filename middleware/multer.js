@@ -1,5 +1,5 @@
-const express = require("express");
-const multer = require('multer');
+import express from 'express';
+import multer from 'multer';
 
 // Set storage engine
 const storage = multer.diskStorage({
@@ -11,7 +11,8 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + '-' + fileName); // Use a unique filename
   },
 });
+
 // Initialize multer
 const upload = multer({ storage: storage });
 
-module.exports = upload;
+export default upload;
