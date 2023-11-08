@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-
-const userSchema = mongoose.Schema({
+import mongoose from 'mongoose';
+//entité user
+const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  
   address: {
     type: String,
     required: true,
@@ -20,14 +21,12 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-
   role: {
     type: String,
     enum: ['organization', 'client'], // Add other roles as needed
     default: 'client',
   },
-  
 });
 
 const User = mongoose.model('User', userSchema);
-module.exports = User; 
+export default User;

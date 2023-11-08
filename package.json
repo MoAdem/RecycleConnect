@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "Collaborative Recycling Platform: An application that connects users who want to recycle unused items with those who need these items, thus encouraging reuse",
   "main": "server.js",
+  "type": "module",
+
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"

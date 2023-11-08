@@ -1,7 +1,9 @@
-const User = require('../model/User'); // Assurez-vous de spécifier le chemin correct vers votre modèle User
-const { validationResult } = require('express-validator');
+import User from "../model/User.js";
 
-const createUser = async (req, res) => {
+
+const UserController = {
+//addUSER
+createUser : async (req, res) => {
   const { username, email, address, password, role } = req.body;
 
   if (!username || !email || !address || !password || !role) {
@@ -29,10 +31,10 @@ const createUser = async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-};
+},
 
-
-const getUsers  = async (req, res) => {
+//affichage
+ getUsers  : async (req, res) => {
   try {
     const user = await User.find();
     if (!user) {
@@ -43,9 +45,9 @@ const getUsers  = async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-};
+},
 
-const getUserById = async (req, res) => {
+getUserById : async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -56,9 +58,9 @@ const getUserById = async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-};
+},
 //affichage 
-const getAllUsers = async (req, res) => {
+ getAllUsers : async (req, res) => {
   try {
     const users = await User.find();
     if (!users || users.length === 0) {
@@ -69,10 +71,10 @@ const getAllUsers = async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-};
+},
 
 // update 
-const updateUser = async (req, res) => {
+  updateUser : async (req, res) => {
   const { username, email, address, password, role } = req.body;
 
   const userFields = {};
@@ -96,9 +98,9 @@ const updateUser = async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-};
+},
 
-const deleteUser = async (req, res) => {
+ deleteUser : async (req, res) => {
   try {
     let user = await User.findById(req.params.id);
 
@@ -113,6 +115,7 @@ const deleteUser = async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-};
+}
 
-module.exports = { createUser, getUsers, getUserById, updateUser, deleteUser };
+}
+export default UserController ;
