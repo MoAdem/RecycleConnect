@@ -2,7 +2,7 @@ const Donation = require("../model/Donation");
 const User = require("../model/User");
 const Event = require("../model/Events");
 
-//merger
+//merg
 // item donation
 exports.item_donation = async (req, res) => {
   try {

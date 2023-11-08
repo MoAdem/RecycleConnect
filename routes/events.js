@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const event_controller = require('../controller/Events')
 const upload = require('../middleware/multer');
-//merge
+//merg
 // routes
 router.post('/create',upload.array('PhotoEvent'), event_controller.event_create);
 router.get('/',event_controller.all_events)
