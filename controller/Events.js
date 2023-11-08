@@ -90,8 +90,6 @@ exports.event_byorg = async (req, res) => {
     const organizerId = req.params.organizerId;
 
     const organizer = await User.findById(organizerId);
-
-    console.log('Organization:', organizer);
     if (!organizer || organizer.role !== 'organization') {
       return res.status(404).json({ error: 'Organization not found' });
     }
