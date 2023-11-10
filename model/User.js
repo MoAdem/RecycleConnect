@@ -42,7 +42,8 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-//generate_token_jwt
+//generate_token_jwt 
+
 userSchema.methods.generateAuthToken = function() {
   try {
     const token = jwt.sign({ _id: this._id, role: this.role }, 'your_actual_secret_key');

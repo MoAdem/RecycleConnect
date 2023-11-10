@@ -1,4 +1,6 @@
 import User from "../model/User.js";
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -119,6 +121,58 @@ loginUser: async (req, res) => {
     console.error('Login error:', error);
     res.status(401).json({ error: error.message });
   }
+},
+//reset password 
+forgotPassword: async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    //  reset token
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    user.resetToken = resetToken;
+    user.resetTokenExpiration = Date.now() + 3600000; // Token expiration in 1 hour
+
+    await user.save();
+
+    // reset link 
+    const resetLink = `http://yourwebsite.com/reset-password?token=${resetToken}`;
+    await sendPasswordResetEmail(email, resetLink);
+
+    res.json({ message: 'Password reset email sent successfully' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+},
 }
+async function sendPasswordResetEmail(email, resetLink) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'bouguerrahanine4@gmail.com',
+      pass: 'ztpx ozpt ypbf jleo',
+    },
+  });
+
+  const mailOptions = {
+    from: 'bouguerrahanine4@gmail.com',
+    to: email,
+    subject: 'Password Reset',
+    html: `<p>Click the following link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
+  };
+
+  return transporter.sendMail(mailOptions);
 }
+
+
 export default UserController ;
