@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 const UserController = {
-  // Function to create a new user
+  //ajout user 
   createUser: async (req, res) => {
     const { username, email, address, password, role } = req.body;
 
@@ -34,7 +34,7 @@ const UserController = {
     }
   },
 
-  // Function to retrieve all users
+  // Affichage 
   getUsers: async (req, res) => {
     try {
       const users = await User.find();
@@ -48,7 +48,7 @@ const UserController = {
     }
   },
 
-  // Function to get a user by ID
+ //affichage by id 
   getUserById: async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
@@ -56,20 +56,6 @@ const UserController = {
         return res.status(404).json({ error: 'User not found' });
       }
       res.json(user);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
-    }
-  },
-
-  // Function to retrieve all users
-  getAllUsers: async (req, res) => {
-    try {
-      const users = await User.find();
-      if (!users || users.length === 0) {
-        return res.status(404).json({ error: 'Users not found' });
-      }
-      res.json(users);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -104,6 +90,7 @@ const UserController = {
   }
 },
 
+//delete
  deleteUser : async (req, res) => {
   try {
     let user = await User.findById(req.params.id);
@@ -120,14 +107,16 @@ const UserController = {
     res.status(500).send('Server Error');
   }
 },
-
 loginUser: async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await User.findByCredentials(username, password);
-    const token = user.generateAuthToken();
+    console.log('User found:', user);
+    const token = await user.generateAuthToken();
+    console.log('Generated token:', token);
     res.status(200).json({ message: 'Login successful', user: user, token: token });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(401).json({ error: error.message });
   }
 }

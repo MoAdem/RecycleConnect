@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+//entité user 
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -21,6 +22,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+ 
   role: {
     type: String,
     enum: ['organization', 'client'], 
@@ -40,9 +42,16 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+//generate_token_jwt
 userSchema.methods.generateAuthToken = function() {
-  const token = jwt.sign({ _id: this._id, role: this.role }, 'your_secret_key');
-  return token;
+  try {
+    const token = jwt.sign({ _id: this._id, role: this.role }, 'your_actual_secret_key');
+    console.log('Generated auth token:', token);
+    return token;
+  } catch (error) {
+    console.error('Error generating auth token:', error);
+    throw new Error('Unable to generate auth token');
+  }
 };
 
 userSchema.statics.findByCredentials = async function(username, password) {
