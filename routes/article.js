@@ -13,7 +13,7 @@ const router = express.Router();
 
 router
 .route('/')
-.post(upload.array('PhotoArticle'),createArticle)
+.post(upload.array('PhotosArticle'),createArticle)
 .get(getAllArticles);
 
 

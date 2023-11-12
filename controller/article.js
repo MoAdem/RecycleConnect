@@ -13,7 +13,7 @@ export async function createArticle(req, res) {
  );
 
  const nouvArticle = await Article.create
-    ({PhotoArticle: photos, 
+    ({PhotosArticle: photos, 
       NomArticle,
       DescriptionArticle, 
       EtatArticle, 
@@ -52,7 +52,7 @@ export async function getArticleById(req, res){
 export async function updateArticle (req, res){
   try {
     const existingarticle = await Article.findById(req.params.id);
-    existingarticle.PhotoArticle = req.files.map(
+    existingarticle.PhotosArticle = req.files.map(
       (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
     existingarticle.NomArticle = req.body.NomArticle; 
     existingarticle.DescriptionArticle = req.body.DescriptionArticle;

@@ -1,32 +1,6 @@
 import Categorie from '../model/categorie.js';
 
 
-/* export function createcategorie (req, res)
-{
-     const { NomCategorie, NbreTotalArticles } = req.body;
-    
-    if (!NomCategorie || !NbreTotalArticles) 
-    {
-      res.status(400).json({ error: 'Champs vides !' });
-    }
-
-    if (NbreTotalArticles < 0) 
-    {
-      res.status(400).json({ error: 'Nombre d\'articles négatif !' });
-    }
-
-    Categorie.create({
-      NomCategorie: req.body.NomCategorie,
-      NbreTotalArticles: req.body.NbreTotalArticles
-    })
-      .then((nouvcategorie) => {
-        res.status(200).json(nouvcategorie);
-      })
-      .catch(res.status(400).json({ error: 'Erreur dans la creation de la categorie' }))
-    
-}
- */
-
 export async function createcategorie(req, res) {
   const { NomCategorie, NbreTotalArticles } = req.body;
  
@@ -45,9 +19,12 @@ export async function createcategorie(req, res) {
   if (existingCategory) {
      return res.status(400).json({ error: "Cette catégorie existe déjà !" });
   }
- 
+  const photos = req.files.map(
+    (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename
+ );
   try {
      const nouvcategorie = await Categorie.create({
+       PhotoCategorie: photos,
        NomCategorie: req.body.NomCategorie,
        NbreTotalArticles: req.body.NbreTotalArticles,
      });
@@ -57,12 +34,6 @@ export async function createcategorie(req, res) {
   }
  }
 
-
-/* export async function getAllCategories (req, res) {
-  Categorie.find()
-  .then((categories) => { res.status(200).json(categories); })
-  .catch(res.status(400).json({ error: 'Erreur de l affichage de toutes categories'}))
-} */
 
 export async function getAllCategories(req, res) {
   try {
@@ -107,7 +78,8 @@ export async function updatecategorie(req, res) {
      if (!existingCategory) {
        return res.status(400).json({ error: "Cette catégorie n'existe pas." });
      }
- 
+     existingCategory.PhotoCategorie = req.files.map(
+      (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
      existingCategory.NomCategorie = NomCategorie;
      existingCategory.NbreTotalArticles = NbreTotalArticles;
  

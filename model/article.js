@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-const {Schema,model,Types }=mongoose;
+const {Schema,model}=mongoose;
 
 
 const articleSchema = new Schema({
-  PhotoArticle: [],
+  PhotosArticle: [],
   NomArticle: String,
   DescriptionArticle: String,
   EtatArticle: String,

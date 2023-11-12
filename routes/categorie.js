@@ -1,4 +1,7 @@
 import express from 'express';
+import multer from 'multer';
+import upload from '../middleware/multer.js';
+
 import { createcategorie, 
         getAllCategories, 
         getcategorieById, 
@@ -8,7 +11,7 @@ import { createcategorie,
 const router = express.Router();
 router
 .route('/')
-.post(createcategorie)
+.post(upload.array('PhotoCategorie'),createcategorie)
 .get(getAllCategories);
 
 router
