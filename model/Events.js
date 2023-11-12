@@ -8,6 +8,10 @@ const eventSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
   startEvent: Date,
   endEvent: Date,
   descriptionEvent: String,

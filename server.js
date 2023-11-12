@@ -5,6 +5,7 @@ import connectToDatabase from './database.js';
 //routes
 import eventRouter from './routes/events.js';
 import donationRouter from './routes/donation.js';
+import newsRouter from './routes/news.js';
 //test user
 import userRoutes from './routes/user.js';
 //merge
@@ -19,8 +20,12 @@ connectToDatabase();
 app.use(cors());
 app.use(bodyParser.json());
 
+app.use('/uploads', express.static('uploads'));
+
 app.use('/api/events', eventRouter);
 app.use('/api/donation', donationRouter);
+
+app.use('/api/news', newsRouter);
 
 //test user
 // app.use('/user', userRoutes);
