@@ -1,4 +1,5 @@
 import Categorie from '../model/categorie.js';
+import nodemailer from 'nodemailer';
 
 
 export async function createcategorie(req, res) {

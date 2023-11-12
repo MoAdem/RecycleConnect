@@ -1,4 +1,5 @@
 import Article from "../model/article.js";
+import nodemailer from 'nodemailer';
 
 
 export async function createArticle(req, res) {
@@ -23,10 +24,39 @@ export async function createArticle(req, res) {
     });
 
  if (nouvArticle) {
+    //sendMail('bouguerra.hanine@esprit.tn', 'Test subject', 'Hello, this is a test email.', '<p>Hello, this is a test email.</p>');
     res.status(200).json(nouvArticle);
  }
 }
 
+async function sendMail(to, subject, text, html) 
+{
+  try {
+      // Création d'un transport pour envoyer l'e-mail
+      const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+              user: 'mariem.marsaoui@esprit.tn',
+              pass: '201JFT2390'
+          }
+      });
+
+      // Création de l'objet de l'e-mail
+      const mailOptions = {
+          from: 'mariem.marsaoui@esprit.tn',
+          to: to,
+          subject: subject,
+          text: text,
+          html: html
+      };
+
+      // Envoi de l'e-mail
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email sent: ' + info.messageId);
+  } catch (error) {
+      console.error('Error sending email:', error);
+  }
+}
 
 
 export async function getAllArticles(req, res) {
