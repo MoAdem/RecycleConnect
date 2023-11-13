@@ -20,9 +20,9 @@ export async function createcategorie(req, res) {
   if (existingCategory) {
      return res.status(400).json({ error: "Cette catégorie existe déjà !" });
   }
-  const photos = req.files.map(
-    (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename
- );
+  
+  const photos = null;
+  //req.files.map((file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
   try {
      const nouvcategorie = await Categorie.create({
        PhotoCategorie: photos,
