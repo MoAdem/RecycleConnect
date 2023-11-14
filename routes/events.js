@@ -8,7 +8,7 @@ import upload from '../middleware/multer.js';
 
 //merg
 // routes
-router.post('/create',upload.array('PhotoEvent'), eventController.event_create);
+router.post('/create',upload.single('PhotoEvent'), eventController.event_create);
 router.get('/',eventController.all_events)
 router.get('/:id',eventController.event_byid)
 router.get('/organizer/:organizerId',eventController.event_byorg)

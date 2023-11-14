@@ -15,7 +15,10 @@ const eventSchema = mongoose.Schema({
   startEvent: Date,
   endEvent: Date,
   descriptionEvent: String,
-  PhotoEvent: [],
+  PhotoEvent: {
+    type: String,
+    default: '',
+  },
   addressEvent: String,
   // status: {
   //     type: String,

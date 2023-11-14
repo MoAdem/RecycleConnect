@@ -12,24 +12,24 @@ const eventsController = {
       return res.status(403).json({ error: 'Unauthorized access' });
     }
 
-    const { nameEvent, descriptionEvent, startEvent, endEvent, addressEvent } = req.body;
+    const { nameEvent, descriptionEvent, addressEvent } = req.body;
 
     // Check if any of the required fields is missing
-    if (!nameEvent || !descriptionEvent || !startEvent || !endEvent || !addressEvent) {
+    if (!nameEvent || !descriptionEvent || !addressEvent) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const photos = req.files.map(
-      (file) => req.protocol + '://' + req.get('host') + '/uploads/' + file.filename
-    );
+    // single photo
+    const photo = req.file
+      ? req.protocol + '://' + req.get('host') + '/uploads/' + req.file.filename
+      : '';
+
 
     const event = new Event({
       nameEvent,
       descriptionEvent,
-      startEvent,
-      endEvent,
       addressEvent,
-      PhotoEvent: photos,
+      PhotoEvent: photo,
       organizer: organizerId,
     });
 
