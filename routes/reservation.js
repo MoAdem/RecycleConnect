@@ -8,6 +8,6 @@ router.get('/', reservationController.getAllReservations);
 router.get('/:reservationId', reservationController.getReservationById);
 router.put('/:reservationId', reservationController.updateReservation);
 router.delete('/:reservationId', reservationController.deleteReservation);
-
+router.get('/:reservationId/generateQRCode', reservationController.generateQRCode);
 export default router;
 

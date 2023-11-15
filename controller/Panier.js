@@ -1,7 +1,7 @@
 import Panier from '../model/Panier.js';
 
-// Créer un panier
 const panierController = {
+  // Créer un panier
   createPanier: async (req, res) => {
     try {
       const { totalPanier, etatPanier } = req.body;
@@ -101,6 +101,50 @@ const panierController = {
       res.status(500).json({ error: 'Internal server error' });
     }
   },
+  // nombre totlae des articles dans un panier 
+  getTotalPaniersCount: async (req, res) => {
+    try {
+      const totalArticles = await Panier.aggregate([
+        {
+          $project: {
+            totalArticles: { $size: '$articles' }, 
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            count: { $sum: '$totalArticles' }, 
+          },
+        },
+      ]);
+  
+      const count = totalArticles.length > 0 ? totalArticles[0].count : 0;
+  
+      res.status(200).json({ success: true, count });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
+   // Rechercher des paniers par nom d'article
+   searchPaniersByArticleName: async (req, res) => {
+    try {
+      const articleName = req.query.articleName;
+
+      if (!articleName) {
+        return res.status(400).json({ error: 'Missing articleName parameter' });
+      }
+
+      const paniers = await Panier.find({ 'articles.NomArticle': { $regex: articleName, $options: 'i' } });
+
+      res.status(200).json({ success: true, paniers });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
+  
+
 };
 
 export default panierController;

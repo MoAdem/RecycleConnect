@@ -8,4 +8,7 @@ router.get('/', panierController.getAllPaniers);
 router.get('/:panierId', panierController.getPanierById);
 router.put('/:panierId', panierController.updatePanier);
 router.delete('/:panierId', panierController.deletePanier);
+router.get('/totalPaniersCount', panierController.getTotalPaniersCount); 
+router.get('/searchByArticleName', panierController.searchPaniersByArticleName); 
+
 export default router;
