@@ -15,6 +15,7 @@ import userRouter from './routes/user.js';
 import articleRoutes from'./routes/article.js';
 import categorieRoutes from'./routes/categorie.js';
 import newsRouter from './routes/news.js';
+import reviewRoutes from'./routes/review.js';
 //test user
 // import userRoutes from './routes/user.js';
 //merge
@@ -43,6 +44,7 @@ app.use('/verifierProduit',verifierProduitRoutes)
 
 app.use('/api/articles', articleRoutes); 
 app.use('/api/categories', categorieRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 app.use('/api/user',userRouter)
 

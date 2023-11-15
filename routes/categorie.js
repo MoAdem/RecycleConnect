@@ -1,15 +1,28 @@
 import express from 'express';
+import multer from 'multer';
+import upload from '../middleware/multer.js';
+
 import { createcategorie, 
         getAllCategories, 
         getcategorieById, 
         updatecategorie, 
-        deletecategorie} from '../controller/categorie.js';
+        deletecategorie,
+        searchCategorieByNom,
+        sortCategoriesByNomAsc} from '../controller/categorie.js';
 
 const router = express.Router();
 router
 .route('/')
-.post(createcategorie)
+.post(upload.array('PhotoCategorie'),createcategorie)
 .get(getAllCategories);
+
+router
+.route('/search/:NomCategorie')
+.get(searchCategorieByNom);
+
+router
+.route('/sort')
+.get(sortCategoriesByNomAsc);
 
 router
 .route('/:id')
