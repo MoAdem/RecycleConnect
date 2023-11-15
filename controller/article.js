@@ -24,7 +24,9 @@ export async function createArticle(req, res) {
     });
 
  if (nouvArticle) {
-    //sendMail('bouguerra.hanine@esprit.tn', 'Test subject', 'Hello, this is a test email.', '<p>Hello, this is a test email.</p>');
+    sendMail('mariem.marsaoui@esprit.tn', 
+    'Important de la part de RecycleConnect','', 
+    'De nouveaux articles ont été ajoutés ! <br> Pour plus de détails, visiter notre plateforme !');
     res.status(200).json(nouvArticle);
  }
 }
@@ -32,18 +34,15 @@ export async function createArticle(req, res) {
 async function sendMail(to, subject, text, html) 
 {
   try {
-      // Création d'un transport pour envoyer l'e-mail
       const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
-              user: 'mariem.marsaoui@esprit.tn',
-              pass: '201JFT2390'
+              user: 'bouguerrahanine4@gmail.com',
+              pass: 'ztpx ozpt ypbf jleo'
           }
       });
-
-      // Création de l'objet de l'e-mail
       const mailOptions = {
-          from: 'mariem.marsaoui@esprit.tn',
+          from: 'bouguerrahanine4@gmail.com',
           to: to,
           subject: subject,
           text: text,

@@ -29,11 +29,41 @@ export async function createcategorie(req, res) {
        NomCategorie: req.body.NomCategorie,
        NbreTotalArticles: req.body.NbreTotalArticles,
      });
+     sendMail('mariem.marsaoui@esprit.tn', 
+    'Important de la part de RecycleConnect', 
+    '','De nouvelles Catégorie ont été ajoutés ! <br> Pour plus de détails, visiter notre plateforme !');
      return res.status(200).json(nouvcategorie);
   } catch (error) {
      return res.status(400).json({ error: "Erreur dans la creation de la categorie" });
   }
  }
+
+ async function sendMail(to, subject, text, html) 
+{
+  try {
+      const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+              user: 'bouguerrahanine4@gmail.com',
+              pass: 'ztpx ozpt ypbf jleo'
+          }
+      });
+      const mailOptions = {
+          from: 'bouguerrahanine4@gmail.com',
+          to: to,
+          subject: subject,
+          text: text,
+          html: html
+      };
+
+      // Envoi de l'e-mail
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email sent: ' + info.messageId);
+  } catch (error) {
+      console.error('Error sending email:', error);
+  }
+}
+
 
 
 export async function getAllCategories(req, res) {
