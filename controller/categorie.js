@@ -55,8 +55,6 @@ export async function createcategorie(req, res) {
           text: text,
           html: html
       };
-
-      // Envoi de l'e-mail
       const info = await transporter.sendMail(mailOptions);
       console.log('Email sent: ' + info.messageId);
   } catch (error) {

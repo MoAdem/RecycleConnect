@@ -7,7 +7,7 @@ import connectToDatabase from './database.js';
 //routes
 import articleRoutes from'./routes/article.js';
 import categorieRoutes from'./routes/categorie.js';
-
+import reviewRoutes from'./routes/review.js';
 
 
 const app = express();
@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 
 app.use('/api/articles', articleRoutes); 
 app.use('/api/categories', categorieRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 
 
