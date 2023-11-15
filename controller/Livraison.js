@@ -12,6 +12,7 @@ export function addliv (req,res){
              numero_Client:req.body.numero_Client,
              ville:req.body.ville,
              address_Client: req.body.address_Client,
+
          })
          .then((newlivraison)=> {
              res.status(200).json(newlivraison)

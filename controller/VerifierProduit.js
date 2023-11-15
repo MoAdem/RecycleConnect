@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport ({
 
     auth: {
         user:'karim.kekli2000@gmail.com',
-        pass:'kimouca1920',
+        pass:'vvfu lemq aaks deva',
     },
 })
 
@@ -30,7 +30,7 @@ export function verfi (req,res){
 
                 const mailOption = {
                     from:'karim.kekli2000@gmail.com',
-                    to:livraison.address_mail_Client,
+                    to:'karim.kekli@esprit.tn',
                     subject: 'État de votre produit',
                     text: 'Votre produit est en bon état',
 
