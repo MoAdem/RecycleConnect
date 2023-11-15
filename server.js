@@ -30,6 +30,8 @@ connectToDatabase();
 app.use(cors());
 app.use(bodyParser.json());
 
+app.use('/uploads', express.static('uploads'));
+
 app.use('/api/events', eventRouter);
 app.use('/api/donation', donationRouter);
 app.use('/api/news', newsRouter);
