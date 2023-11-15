@@ -10,7 +10,7 @@ const newsSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  newsPhoto: [],
+  newsPhoto: String,
   description: String,
   url: {
     type: String,

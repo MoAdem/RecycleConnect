@@ -14,6 +14,6 @@ router.get('/scrape-news', async (req, res) => {
       res.status(500).json({ message: 'Internal server error', error: error.message });
     }
   });
-    router.get('/news',newsController.all_news)
+    router.get('/',newsController.all_news)
 
 export default router;
