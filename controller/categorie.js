@@ -45,6 +45,7 @@ export async function getAllCategories(req, res) {
   }
  }
 
+ 
 export async function getcategorieById (req, res) {
   try {
   const categorie = await Categorie.findById(req.params.id)
