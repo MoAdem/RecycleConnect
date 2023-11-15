@@ -1,4 +1,4 @@
-/*import { validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 import PointCollecte from "../model/PointCollecte.js";
 
 export function addPc (req,res){
@@ -11,7 +11,9 @@ export function addPc (req,res){
             address_mail_Pc : req.body.address_mail_Pc,
             address_Pc : req.body.address_Pc,
             numero_tel : req.body.numero_tel,
-            image: `${req.protocol}://${req.get("host")}/img/${req.file.filename}`,
+            image : `${req.protocol}://${req.get("host")}/img/${req.file.filename}`,
+            x : req.body.x,
+            y : req.body.y,
         })
         .then((newpointCollecte)=> {
             res.status(200).json(newpointCollecte)
@@ -68,6 +70,12 @@ export function updatePcByName(req, res) {
           if (req.file) {
             newpointCollecte.image = `${req.protocol}://${req.get("host")}/img/${req.file.filename}`;
           }
+          if (req.body.x) {
+            newpointCollecte.x = req.body.x ;
+          }
+          if (req.body.y) {
+            newpointCollecte.y = req.body.y
+          }
   
           // Enregistrement
           newpointCollecte
@@ -103,4 +111,4 @@ export function deleteAllPc(req,res){
     .catch(err=> {
         res.status(500).json({error:err});
     });
-}*/
+}

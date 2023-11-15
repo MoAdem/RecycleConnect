@@ -1,4 +1,4 @@
-/*import mongoose from "mongoose";
+import mongoose from "mongoose";
 const {Schema,model,Types }=mongoose;
 
 const livraisonSchema = new Schema(
@@ -33,4 +33,4 @@ const livraisonSchema = new Schema(
         timestamps:true
     }
 );
-export default model ('livraison',livraisonSchema)*/
+export default model ('livraison',livraisonSchema)
