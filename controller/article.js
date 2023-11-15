@@ -104,3 +104,26 @@ export async function deleteArticle (req, res){
     res.status(400).json({ error: 'Erreur de la suppression de l article' });
   }
 }
+
+export const searchArticleByNom = async (req, res) => {
+  try {
+    const nomArticle = req.params.NomArticle.trim();
+    //console.log('NomArticle:', nomArticle);
+    const specialNomArticle = nomArticle.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const article = await Article.findOne({ NomArticle: { $regex: new RegExp(specialNomArticle, 'i') },
+  });
+    //console.log('Found Article:', article);
+     return res.status(200).json({ article });
+  } catch (error) {
+     return res.status(400).json({ error: error.message || "Erreur !" });
+  }
+}
+
+export const sortArticlesByNomAsc = async (req, res) => {
+  try {
+    const articles = await Article.find().sort({ NomArticle: 1 });
+    return res.status(200).json({ articles });
+  } catch (error) {
+    return res.status(400).json({ message: 'Erreur !' });
+  }
+}

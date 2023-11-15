@@ -6,7 +6,9 @@ import { createArticle,
          getAllArticles, 
          getArticleById, 
          updateArticle, 
-         deleteArticle } from '../controller/article.js'; 
+         deleteArticle,
+        searchArticleByNom,
+        sortArticlesByNomAsc } from '../controller/article.js'; 
 
 
 const router = express.Router();
@@ -16,6 +18,13 @@ router
 .post(upload.array('PhotosArticle'),createArticle)
 .get(getAllArticles);
 
+router
+.route('/search/:NomArticle')
+.get(searchArticleByNom);
+
+router
+.route('/sort')
+.get(sortArticlesByNomAsc);
 
 router
 .route('/:id')

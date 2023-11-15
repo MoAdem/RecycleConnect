@@ -3,16 +3,16 @@ import nodemailer from 'nodemailer';
 
 
 export async function createcategorie(req, res) {
-  const { NomCategorie, NbreTotalArticles } = req.body;
+  const { NomCategorie, NbreTotalCategories } = req.body;
  
-  if (!NomCategorie || !NbreTotalArticles) 
+  if (!NomCategorie || !NbreTotalCategories) 
   {
      return res.status(400).json({ error: "Champs vides !" });
   }
  
-  if (NbreTotalArticles < 0) 
+  if (NbreTotalCategories < 0) 
   {
-     return res.status(400).json({ error: "Nombre d'articles négatif !" });
+     return res.status(400).json({ error: "Nombre d'Categories négatif !" });
   }
  
   const existingCategory = await Categorie.findOne({ NomCategorie });
@@ -27,7 +27,7 @@ export async function createcategorie(req, res) {
      const nouvcategorie = await Categorie.create({
        PhotoCategorie: photos,
        NomCategorie: req.body.NomCategorie,
-       NbreTotalArticles: req.body.NbreTotalArticles,
+       NbreTotalCategories: req.body.NbreTotalCategories,
      });
      sendMail('mariem.marsaoui@esprit.tn', 
     'Important de la part de RecycleConnect', 
@@ -95,14 +95,14 @@ export async function getcategorieById (req, res) {
  */
 
 export async function updatecategorie(req, res) {
-  const { NomCategorie, NbreTotalArticles } = req.body;
+  const { NomCategorie, NbreTotalCategories } = req.body;
  
-  if (!NomCategorie || !NbreTotalArticles) {
+  if (!NomCategorie || !NbreTotalCategories) {
      return res.status(400).json({ error: "Champs vides !" });
   }
  
-  if (NbreTotalArticles < 0) {
-     return res.status(400).json({ error: "Nombre d'articles négatif !" });
+  if (NbreTotalCategories < 0) {
+     return res.status(400).json({ error: "Nombre d'Categories négatif !" });
   }
  
   try {
@@ -113,7 +113,7 @@ export async function updatecategorie(req, res) {
      existingCategory.PhotoCategorie = req.files.map(
       (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
      existingCategory.NomCategorie = NomCategorie;
-     existingCategory.NbreTotalArticles = NbreTotalArticles;
+     existingCategory.NbreTotalCategories = NbreTotalCategories;
  
      const updatedCategory = await existingCategory.save();
      return res.status(200).json(updatedCategory);
@@ -124,8 +124,6 @@ export async function updatecategorie(req, res) {
 
 
 
-
-
 export async function deletecategorie (req, res) {
   try {
   const categorie = await Categorie.findByIdAndRemove(req.params.id);
@@ -133,3 +131,27 @@ export async function deletecategorie (req, res) {
   }
   catch(error){ res.status(400).json({ error: 'Erreur de la suppression de la categorie' });}
 }
+
+
+export const searchCategorieByNom = async (req, res) => {
+   try {
+      const nomCategorie = req.params.NomCategorie.trim();
+    //console.log('NomCategorie:', nomCategorie);
+    const specialNomCategorie = nomCategorie.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const categorie = await Categorie.findOne({ NomCategorie: { $regex: new RegExp(specialNomCategorie, 'i') },
+   });
+   //console.log('Found Categorie:', categprie);
+      return res.status(200).json({ categorie });
+   } catch (error) {
+      return res.status(400).json({ error: error.message || "Erreur !" });
+   }
+ }
+
+ export const sortCategoriesByNomAsc = async (req, res) => {
+   try {
+     const categories = await Categorie.find().sort({ NomCategorie: 1 });
+     return res.status(200).json({ categories });
+   } catch (error) {
+     return res.status(400).json({ message: 'Erreur !' });
+   }
+ }

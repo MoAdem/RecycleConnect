@@ -6,13 +6,23 @@ import { createcategorie,
         getAllCategories, 
         getcategorieById, 
         updatecategorie, 
-        deletecategorie} from '../controller/categorie.js';
+        deletecategorie,
+        searchCategorieByNom,
+        sortCategoriesByNomAsc} from '../controller/categorie.js';
 
 const router = express.Router();
 router
 .route('/')
 .post(upload.array('PhotoCategorie'),createcategorie)
 .get(getAllCategories);
+
+router
+.route('/search/:NomCategorie')
+.get(searchCategorieByNom);
+
+router
+.route('/sort')
+.get(sortCategoriesByNomAsc);
 
 router
 .route('/:id')
