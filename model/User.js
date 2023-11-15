@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-
-const userSchema = mongoose.Schema({
+//entité user
+const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -11,14 +11,20 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  
+  address: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   password: {
     type: String,
     required: true,
   },
   role: {
     type: String,
-    enum: ['organization', 'regular'], // Add other roles as needed
-    default: 'regular',
+    enum: ['organization', 'client'], // Add other roles as needed
+    default: 'client',
   },
 });
 
