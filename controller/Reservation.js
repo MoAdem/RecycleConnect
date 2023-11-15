@@ -1,5 +1,5 @@
 import Reservation from '../model/Reservation.js';
-
+import qrcode from 'qrcode';
 // Créer une réservation d'article
 const reservationController = {
   createReservation: async (req, res) => {
@@ -101,6 +101,30 @@ const reservationController = {
       if (error.name === 'CastError') {
         return res.status(400).json({ error: 'Invalid reservation ID' });
       }
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
+  generateQRCode: async (req, res) => {
+    try {
+      const reservationId = req.params.reservationId;
+
+      // Récupérer les détails de la réservation
+      const reservation = await Reservation.findById(reservationId);
+      if (!reservation) {
+        return res.status(404).json({ error: 'Reservation not found' });
+      }
+
+      // Construire une chaîne de données à inclure dans le code QR
+      const qrData = `${reservation.dateReservation}|${reservation.dateLivraison}|${reservation.commentaire}|${reservation.lieuReservation}|${reservation.etatReservation}`;
+
+      // Générer le code QR en tant que fichier ou URL
+      const qrCodeImagePath = `./qr_codes/reservation_${reservationId}.png`;
+      await qrcode.toFile(qrCodeImagePath, qrData);
+
+      // Envoyer le chemin du fichier ou l'URL en réponse
+      res.status(200).json({ success: true, qrCode: qrCodeImagePath });
+    } catch (error) {
+      console.error(error);
       res.status(500).json({ error: 'Internal server error' });
     }
   },
