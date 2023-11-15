@@ -14,6 +14,7 @@ import verifierProduitRoutes from './routes/verifierProduit.js'
 import userRouter from './routes/user.js';
 import articleRoutes from'./routes/article.js';
 import categorieRoutes from'./routes/categorie.js';
+import newsRouter from './routes/news.js';
 //test user
 // import userRoutes from './routes/user.js';
 //merge
@@ -30,6 +31,7 @@ app.use(bodyParser.json());
 
 app.use('/api/events', eventRouter);
 app.use('/api/donation', donationRouter);
+app.use('/api/news', newsRouter);
 
 app.use('/api/reservation', reservationRouter);
 app.use('/api/panier', panierRouter);
@@ -37,6 +39,7 @@ app.use('/api/panier', panierRouter);
 app.use('/pointCollecte',pointCollecteRoutes);
 app.use('/livraison',livraisonRoutes);
 app.use('/verifierProduit',verifierProduitRoutes)
+
 
 app.use('/api/articles', articleRoutes); 
 app.use('/api/categories', categorieRoutes);
