@@ -26,5 +26,8 @@
     "nodemailer": "^6.9.7",
     "qrcode": "^1.5.3",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
