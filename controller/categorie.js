@@ -2,7 +2,7 @@ import Categorie from '../model/categorie.js';
 import nodemailer from 'nodemailer';
 
 
-export async function createcategorie(req, res) {
+export async function Createcategorie(req, res) {
   const { NomCategorie, NbreTotalCategories } = req.body;
  
   if (!NomCategorie || !NbreTotalCategories) 
@@ -29,7 +29,7 @@ export async function createcategorie(req, res) {
        NomCategorie: req.body.NomCategorie,
        NbreTotalCategories: req.body.NbreTotalCategories,
      });
-     sendMail('mariem.marsaoui@esprit.tn', 
+     SendMail('mariem.marsaoui@esprit.tn', 
     'Important de la part de RecycleConnect', 
     '','De nouvelles Catégorie ont été ajoutés ! <br> Pour plus de détails, visiter notre plateforme !');
      return res.status(200).json(nouvcategorie);
@@ -38,7 +38,7 @@ export async function createcategorie(req, res) {
   }
  }
 
- async function sendMail(to, subject, text, html) 
+ async function SendMail(to, subject, text, html) 
 {
   try {
       const transporter = nodemailer.createTransport({
@@ -64,7 +64,7 @@ export async function createcategorie(req, res) {
 
 
 
-export async function getAllCategories(req, res) {
+export async function GetAllCategories(req, res) {
   try {
      const categories = await Categorie.find();
      res.status(200).json(categories);
@@ -74,7 +74,7 @@ export async function getAllCategories(req, res) {
  }
 
  
-export async function getcategorieById (req, res) {
+export async function GetCategorieById (req, res) {
   try {
   const categorie = await Categorie.findById(req.params.id)
    res.status(200).json(categorie); 
@@ -92,7 +92,7 @@ export async function getcategorieById (req, res) {
 }
  */
 
-export async function updatecategorie(req, res) {
+export async function UpdateCategorie(req, res) {
   const { NomCategorie, NbreTotalCategories } = req.body;
  
   if (!NomCategorie || !NbreTotalCategories) {
@@ -122,7 +122,7 @@ export async function updatecategorie(req, res) {
 
 
 
-export async function deletecategorie (req, res) {
+export async function DeleteCategorie (req, res) {
   try {
   const categorie = await Categorie.findByIdAndRemove(req.params.id);
   res.json({ message: 'categorie supprimée' });
@@ -131,7 +131,7 @@ export async function deletecategorie (req, res) {
 }
 
 
-export const searchCategorieByNom = async (req, res) => {
+export const SearchCategorieByNom = async (req, res) => {
    try {
       const nomCategorie = req.params.NomCategorie.trim();
     //console.log('NomCategorie:', nomCategorie);
@@ -145,7 +145,7 @@ export const searchCategorieByNom = async (req, res) => {
    }
  }
 
- export const sortCategoriesByNomAsc = async (req, res) => {
+ export const SortCategoriesByNomAsc = async (req, res) => {
    try {
      const categories = await Categorie.find().sort({ NomCategorie: 1 });
      return res.status(200).json({ categories });

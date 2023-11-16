@@ -2,35 +2,35 @@ import express from 'express';
 import multer from 'multer';
 import upload from '../middleware/multer.js';
 
-import { createArticle, 
-         getAllArticles, 
-         getArticleById, 
-         updateArticle, 
-         deleteArticle,
-        searchArticleByNom,
-        sortArticlesByNomAsc } from '../controller/article.js'; 
+import { CreateArticle, 
+         GetAllArticles, 
+         GetArticleById, 
+         UpdateArticle, 
+         DeleteArticle,
+        SearchArticleByNom,
+        SortArticlesByNomAsc } from '../controller/article.js'; 
 
 
 const router = express.Router();
 
 router
 .route('/')
-.post(upload.array('PhotosArticle'),createArticle)
-.get(getAllArticles);
+.post(upload.array('PhotosArticle'),CreateArticle)
+.get(GetAllArticles);
 
 router
 .route('/search/:NomArticle')
-.get(searchArticleByNom);
+.get(SearchArticleByNom);
 
 router
 .route('/sort')
-.get(sortArticlesByNomAsc);
+.get(SortArticlesByNomAsc);
 
 router
 .route('/:id')
-.get(getArticleById)
-.put(updateArticle)
-.delete(deleteArticle);
+.get(GetArticleById)
+.put(UpdateArticle)
+.delete(DeleteArticle);
 
 
 export default router;

@@ -1,7 +1,7 @@
 import Review from '../model/review.js';
 
 
-export async function createReview(req, res) {
+export async function CreateReview(req, res) {
   const {Note, Avis, ArticleId} = req.body;
     console.log('Received data:', req.body);
    if (!Note || !Avis || !ArticleId) 
@@ -25,7 +25,7 @@ export async function createReview(req, res) {
  }
 
  
-export async function getAllReviews(req, res) {
+export async function GetAllReviews(req, res) {
   try {
      const reviews = await Review.find();
      res.status(200).json(reviews);
@@ -41,7 +41,7 @@ export async function getAllReviews(req, res) {
 }
  */
 
-export async function updateReview(req, res) {
+export async function UpdateReview(req, res) {
   const { Note, Avis, ArticleId } = req.body;
  
   if (!Note || !Avis) {
@@ -71,7 +71,7 @@ export async function updateReview(req, res) {
 
 
 
-export async function deleteReview (req, res) {
+export async function DeleteReview (req, res) {
   try {
   const review = await Review.findByIdAndRemove(req.params.id);
   res.json({ message: 'review supprimé' });
