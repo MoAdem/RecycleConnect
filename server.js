@@ -24,7 +24,7 @@ const app = express();
 import cors from 'cors';
 // import { createSampleUser } from "./controller/User.js";
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000
 
 connectToDatabase();
 app.use(cors());

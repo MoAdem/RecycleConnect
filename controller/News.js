@@ -55,7 +55,7 @@ scrapeNewsData : async (url, source, selectors) => {
             selectors: {
                 articleSelector: 'section.section--biscuit-light',
                 title: 'div.column div.textarea.parbase.section h3.teaser__heading--hp a',
-                newsPhoto: 'div.column div.responsiveimage.parbase.section a div picture img',
+                newsPhoto: 'div.responsiveimage.parbase.section img',
                 description: 'div.textarea.parbase.section p',
             },
           },

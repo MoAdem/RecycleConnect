@@ -12,10 +12,10 @@ const eventsController = {
       return res.status(403).json({ error: 'Unauthorized access' });
     }
 
-    const { nameEvent, descriptionEvent, addressEvent } = req.body;
+    const { nameEvent, descriptionEvent, addressEvent, startEvent } = req.body;
 
     // Check if any of the required fields is missing
-    if (!nameEvent || !descriptionEvent || !addressEvent) {
+    if (!nameEvent || !descriptionEvent || !addressEvent || !startEvent) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
@@ -29,6 +29,7 @@ const eventsController = {
       nameEvent,
       descriptionEvent,
       addressEvent,
+      startEvent,
       PhotoEvent: photo,
       organizer: organizerId,
     });
