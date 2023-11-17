@@ -2,15 +2,15 @@ import Categorie from '../model/categorie.js';
 import nodemailer from 'nodemailer';
 
 
-export async function Createcategorie(req, res) {
-  const { NomCategorie, NbreTotalCategories } = req.body;
+export async function CreateCategorie(req, res) {
+  const { NomCategorie, NbreTotalArticles } = req.body;
  
-  if (!NomCategorie || !NbreTotalCategories) 
+  if (!NomCategorie || !NbreTotalArticles) 
   {
      return res.status(400).json({ error: "Champs vides !" });
   }
  
-  if (NbreTotalCategories < 0) 
+  if (NbreTotalArticles < 0) 
   {
      return res.status(400).json({ error: "Nombre d'Categories négatif !" });
   }
@@ -21,13 +21,12 @@ export async function Createcategorie(req, res) {
      return res.status(400).json({ error: "Cette catégorie existe déjà !" });
   }
   
-  const photos = null;
-  //req.files.map((file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
+  const photos = req.files.map((file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
   try {
      const nouvcategorie = await Categorie.create({
        PhotoCategorie: photos,
        NomCategorie: req.body.NomCategorie,
-       NbreTotalCategories: req.body.NbreTotalCategories,
+       NbreTotalArticles: req.body.NbreTotalArticles,
      });
      SendMail('mariem.marsaoui@esprit.tn', 
     'Important de la part de RecycleConnect', 
@@ -93,13 +92,13 @@ export async function GetCategorieById (req, res) {
  */
 
 export async function UpdateCategorie(req, res) {
-  const { NomCategorie, NbreTotalCategories } = req.body;
+  const { NomCategorie, NbreTotalArticles} = req.body;
  
-  if (!NomCategorie || !NbreTotalCategories) {
+  if (!NomCategorie || !NbreTotalArticles) {
      return res.status(400).json({ error: "Champs vides !" });
   }
  
-  if (NbreTotalCategories < 0) {
+  if (NbreTotalArticles < 0) {
      return res.status(400).json({ error: "Nombre d'Categories négatif !" });
   }
  
@@ -111,7 +110,7 @@ export async function UpdateCategorie(req, res) {
      existingCategory.PhotoCategorie = req.files.map(
       (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
      existingCategory.NomCategorie = NomCategorie;
-     existingCategory.NbreTotalCategories = NbreTotalCategories;
+     existingCategory.NbreTotalArticles = NbreTotalArticles;
  
      const updatedCategory = await existingCategory.save();
      return res.status(200).json(updatedCategory);
