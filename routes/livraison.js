@@ -1,6 +1,7 @@
 import express from 'express';
 import {body} from 'express-validator'
-import { addliv, deleteAllliv, deleteOnceliv, getOnceliv, getliv, updateliv} from '../controller/Livraison.js';
+import { addliv, deleteAllliv, deleteOnceliv, deletelivraa, getOnceliv, getliv, updatedlivraa, updateliv, updatelivra} from '../controller/Livraison.js';
+
 
 const router = express.Router();
 router
@@ -10,10 +11,18 @@ router
 .get(getliv);
 
 
-router
+/*router
 .route("/:Nom_Client")
 .get(getOnceliv)
 .delete(deleteOnceliv)
-.put(updateliv)
+.put(updateliv);
+/*router
+.route("/:_id")
+.put(updatelivra);
+*/
+router.route("/:_id")
+.put(updatedlivraa)
+.delete(deletelivraa);
+
 
 export default router;

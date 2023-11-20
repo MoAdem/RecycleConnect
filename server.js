@@ -6,7 +6,8 @@ import cors from 'cors';
 import { notFoundError,errorHandler } from './middleware/error-handler.js';
 import livraisonRoutes from './routes/livraison.js';
 import pointCollecteRoutes from './routes/pointCollecte.js';
-import verifierProduitRoutes from './routes/verifierProduit.js'
+import verifierProduitRoutes from './routes/verifierProduit.js';
+import reservationPcRoutes from './routes/reservationPc.js';
 
 const app = express()
 const hostname = "127.0.0.1";
@@ -15,6 +16,7 @@ const databaseName = 'PDM'
 
 mongoose.set('debug', true);
 mongoose.Promise = global.Promise
+mongoose
 mongoose
 .connect(`mongodb://${hostname}:27017/${databaseName}`)
 .then (() => {
@@ -41,6 +43,7 @@ app.use('/gse', (req,res,next)=> {
 app.use('/pointCollecte',pointCollecteRoutes);
 app.use('/livraison',livraisonRoutes);
 app.use('/verifierProduit',verifierProduitRoutes)
+app.use('/reservationPc',reservationPcRoutes)
 
 
 app.use(notFoundError);

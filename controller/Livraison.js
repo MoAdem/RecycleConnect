@@ -33,6 +33,17 @@ export function addliv (req,res){
         res.status(500).json({error:err})
     });
 }
+export function deleteliv(req, res) {
+  Livraison
+  .findByIdAndDelete({ _id })
+    .then((doc) => {
+      res.status(200).json(doc);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+}
+
 
 export function getOnceliv(req,res) {
     Livraison
@@ -55,6 +66,16 @@ export function deleteOnceliv(req,res){
         res.status(500).json({error: err})
     });
 }
+export function deletelivraa(req, res) {
+  Livraison
+  .findByIdAndDelete({ _id: req.params._id })
+    .then((doc) => {
+      res.status(200).json(doc);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+}
 
 export function deleteAllliv(req,res){
     Livraison
@@ -66,6 +87,84 @@ export function deleteAllliv(req,res){
         res.status(500).json({error:err});
     });
 }
+export function updatelivra(req, res) {
+  if (!validationResult(req).isEmpty()) {
+    return res.status(400).json({ error: validationResult(req).array() });
+  }
+
+  const { _id } = req.params;
+
+  Livraison
+    .findById(_id)
+    .then((newlivraison) => {
+      if (!newlivraison) {
+        return res.status(404).json({ error: "Livraison non trouvée" });
+      }
+
+      if (req.body.Nom_Article) {
+        newlivraison.Nom_Article = req.body.Nom_Article;
+      }
+
+      if (req.body.Nom_Client) {
+        newlivraison.Nom_Client = req.body.Nom_Client;
+      }
+
+      if (req.body.address_mail_Client) {
+        newlivraison.address_mail_Client = req.body.address_mail_Client;
+      }
+
+      if (req.body.numero_Client) {
+        newlivraison.numero_Client = req.body.numero_Client;
+      }
+
+      if (req.body.ville) {
+        newlivraison.ville = req.body.ville;
+      }
+
+      if (req.body.address_Client) {
+        newlivraison.address_Client = req.body.address_Client;
+      }
+
+      newlivraison
+        .save()
+        .then((updatedliv) => {
+          res.status(200).json(updatedliv);
+        })
+        .catch((err) => {
+          res.status(500).json({ error: err });
+        });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+}
+/*
+export function updatelivraison(req, res){
+  if (!validationResult(req).isEmpty()) {
+    res.status(400).json({ error: validationResult(req).array() });
+  } else {
+    const { _id }= req,res;
+  Livraison
+    .findByIdAndUpdate(req.params._id, req.body)
+    .then((updateliv) => {
+      res.status(200).json(updateliv);
+    })
+    .catch(err => {
+      res.status(500).json({ error: err });
+    });
+}*/
+
+/*
+export function updatelivraison(req,res){
+  Livraison
+  .findByIdAndUpdate(req.params._id, req.body)
+  .then((updatedlivraison)=>{
+    res.status(200).json(updatedlivraison);
+  })
+  .catch((err)=>{
+    res.status(400).json({error:err});
+  });
+}*/
 
 export function updateliv(req, res) {
     if (!validationResult(req).isEmpty()) {
@@ -113,4 +212,14 @@ export function updateliv(req, res) {
           res.status(500).json({ error: err });
         });
     }
+  }
+  export function updatedlivraa(req,res){
+    Livraison
+    .findByIdAndUpdate(req.params._id, req.body)
+    .then((updatedliv)=>{
+      res.status(200).json(updatedliv);
+    })
+    .catch((err)=>{
+      res.status(400).json({error:err});
+    });
   }
