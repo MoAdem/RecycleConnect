@@ -36,7 +36,7 @@ export function getPc(req,res){
 }
 export function getOncePc(req,res) {
     PointCollecte
-    .findOne({"Nom_Pc":req.params.Nom_Pc})
+    .findById({_id:req.params._id})
     .then(doc =>{
         res.status(200).json(doc);
 
@@ -45,53 +45,8 @@ export function getOncePc(req,res) {
         res.status(500).json({error:err});
     });
 }
+/*
 
-export function updatePcByName(req, res) {
-    if (!validationResult(req).isEmpty()) {
-      res.status(400).json({ error: validationResult(req).array() });
-    } else {
-      const { Nom_Pc } = req.body;
-  
-      PointCollecte
-        .findOne({ Nom_Pc: Nom_Pc })
-        .then((newpointCollecte) => {
-  
-  
-          // MMAJ les champs indiv
-          if (req.body.address_mail_Pc) {
-            newpointCollecte.address_mail_Pc = req.body.address_mail_Pc;
-          }
-          if (req.body.address_Pc) {
-            newpointCollecte.address_Pc = req.body.address_Pc;
-          }
-          if (req.body.numero_tel) {
-            newpointCollecte.numero_tel = req.body.numero_tel;
-          }
-          if (req.file) {
-            newpointCollecte.image = `${req.protocol}://${req.get("host")}/img/${req.file.filename}`;
-          }
-          if (req.body.x) {
-            newpointCollecte.x = req.body.x ;
-          }
-          if (req.body.y) {
-            newpointCollecte.y = req.body.y
-          }
-  
-          // Enregistrement
-          newpointCollecte
-            .save()
-            .then((updatedPc) => {
-              res.status(200).json(updatedPc);
-            })
-            .catch((err) => {
-              res.status(500).json({ error: err });
-            });
-        })
-        .catch((err) => {
-          res.status(500).json({ error: err });
-        });
-    }
-}
 export function deleteOncePc(req,res){
     PointCollecte
     .findOneAndDelete({"Nom_Pc":req.params.Nom_Pc})
@@ -101,7 +56,7 @@ export function deleteOncePc(req,res){
     .catch(err => {
         res.status(500).json({error: err})
     });
-}
+}*/
 export function deleteAllPc(req,res){
     PointCollecte
     .deleteMany({})
@@ -110,5 +65,30 @@ export function deleteAllPc(req,res){
     })
     .catch(err=> {
         res.status(500).json({error:err});
+    });
+}
+export function deleteOnePoint(req, res) {
+  PointCollecte
+  .findByIdAndDelete({ _id:req.params._id })
+    .then((doc) => {
+      res.status(200).json(doc);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+}
+export function UpdatePoint(req, res) {
+  const { _id } = req.params;
+  const updatedPoint = req.body;
+  if (req.file) {
+    updatedPoint.image = `${req.protocol}://${req.get("host")}/img/${req.file.filename}`// Mettez à jour le chemin de l'image si une nouvelle image est fournie
+  }
+    
+  PointCollecte.findByIdAndUpdate(_id, updatedPoint)
+    .then((doc) => {
+      res.status(200).json(doc);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
     });
 }

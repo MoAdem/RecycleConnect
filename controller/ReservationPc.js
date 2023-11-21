@@ -30,6 +30,16 @@ export function getress(req,res){
         res.status(500).json({error:err})
     })
 }
+export function getOnceRes(req,res){
+  ReservationPc
+  .findById({_id : req.params._id})
+  .then(docs => {
+      res.status(200).json(docs);
+  })
+  .catch(err => {
+      res.status(500).json({error:err})
+  })
+}
 export function deleteOnceRess(req, res) {
     ReservationPc
     .findOneAndDelete({ _id: req.params._id })

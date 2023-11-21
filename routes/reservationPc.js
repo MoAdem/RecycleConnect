@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { addres, deleteOnceRess, getress, updateres } from '../controller/ReservationPc.js';
+import { addres, deleteOnceRess, getOnceRes, getress, updateres } from '../controller/ReservationPc.js';
 
 
 const router = express.Router();
@@ -12,6 +12,8 @@ router
 router
 .route('/:_id')
 .delete(deleteOnceRess)
-.put(updateres);
+.put(updateres)
+.get(getOnceRes)
+
 
 export default router ; 

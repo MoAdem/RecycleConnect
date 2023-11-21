@@ -1,6 +1,6 @@
 import express from 'express';
 import {body} from 'express-validator'
-import { addliv, deleteAllliv, deleteOnceliv, deletelivraa, getOnceliv, getliv, updatedlivraa, updateliv, updatelivra} from '../controller/Livraison.js';
+import { addliv, deleteAllliv, deletelivraa, getOneLivraison, getliv, updatedlivraa} from '../controller/Livraison.js';
 
 
 const router = express.Router();
@@ -16,13 +16,11 @@ router
 .get(getOnceliv)
 .delete(deleteOnceliv)
 .put(updateliv);
-/*router
-.route("/:_id")
-.put(updatelivra);
 */
 router.route("/:_id")
 .put(updatedlivraa)
-.delete(deletelivraa);
+.delete(deletelivraa)
+.get(getOneLivraison)
 
 
 export default router;
