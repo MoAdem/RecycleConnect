@@ -6,6 +6,29 @@ import newsController from '../controller/News.js';
 
 //merg
 // routes
+
+/**
+ * @swagger
+ * tags:
+ *   name: News
+ *   description: API for managing news
+ */
+
+/**
+ * @swagger
+ * /api/news/scrape-news:
+ *   get:
+ *     summary: Scrape and save news
+ *     tags: [News]
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: News scraped successfully
+ */
 router.get('/scrape-news', async (req, res) => {
     try {
       await newsController.scrapeAndSaveNews(req, res);
