@@ -6,6 +6,8 @@ import connectToDatabase from './database.js';
 import reservationRouter from './routes/reservation.js';
 import panierRouter from './routes/panier.js';
 //test user
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './middleware/swaggerConfig.js';
 
 //merge
 
@@ -22,6 +24,8 @@ app.use(bodyParser.json());
 
 app.use('/api/reservation', reservationRouter);
 app.use('/api/panier', panierRouter);
+//swagger ui
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 //test user
 // app.use('/user', userRoutes);
 // createSampleUser();

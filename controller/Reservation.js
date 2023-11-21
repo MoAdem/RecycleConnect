@@ -1,6 +1,5 @@
 import Reservation from '../model/Reservation.js';
-import qrcode from 'qrcode';
-// Créer une réservation d'article
+
 const reservationController = {
   createReservation: async (req, res) => {
     try {
@@ -10,12 +9,16 @@ const reservationController = {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
+      // Récupérer l'ID de l'utilisateur connecté depuis la session ou le JWT
+      const userId = req.user.id;  
+
       const reservation = new Reservation({
         dateReservation,
         dateLivraison,
         commentaire,
         lieuReservation,
         etatReservation,
+        userId,  // Ajouter l'ID de l'utilisateur à la réservation
       });
 
       await reservation.save();
@@ -27,7 +30,6 @@ const reservationController = {
     }
   },
 
-  // Lire toutes les réservations d'articles
   getAllReservations: async (req, res) => {
     try {
       const reservations = await Reservation.find();
@@ -39,12 +41,11 @@ const reservationController = {
     }
   },
 
-  // Lire une réservation d'article par son ID
   getReservationById: async (req, res) => {
     try {
       const reservationId = req.params.reservationId;
 
-      const reservation = await Reservation.findById(reservationId);
+      const reservation = await Reservation.findOne({ _id: reservationId, userId: req.user.id });
 
       if (!reservation) {
         return res.status(404).json({ error: 'Reservation not found' });
@@ -60,15 +61,18 @@ const reservationController = {
     }
   },
 
-  // Mettre à jour une réservation d'article
   updateReservation: async (req, res) => {
     try {
       const reservationId = req.params.reservationId;
       const updatedData = req.body;
 
-      const reservation = await Reservation.findByIdAndUpdate(reservationId, updatedData, {
-        new: true,
-      });
+      const userId = req.user.id;  // Assurez-vous que cette information est disponible dans votre middleware d'authentification
+
+      const reservation = await Reservation.findOneAndUpdate(
+        { _id: reservationId, userId: userId },
+        updatedData,
+        { new: true }
+      );
 
       if (!reservation) {
         return res.status(404).json({ error: 'Reservation not found' });
@@ -84,12 +88,11 @@ const reservationController = {
     }
   },
 
-  // Supprimer une réservation d'article
   deleteReservation: async (req, res) => {
     try {
       const reservationId = req.params.reservationId;
 
-      const result = await Reservation.findByIdAndDelete(reservationId);
+      const result = await Reservation.findOneAndDelete({ _id: reservationId, userId: req.user.id });
 
       if (!result) {
         return res.status(404).json({ error: 'Reservation not found' });
@@ -101,30 +104,6 @@ const reservationController = {
       if (error.name === 'CastError') {
         return res.status(400).json({ error: 'Invalid reservation ID' });
       }
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  },
-  generateQRCode: async (req, res) => {
-    try {
-      const reservationId = req.params.reservationId;
-
-      // Récupérer les détails de la réservation
-      const reservation = await Reservation.findById(reservationId);
-      if (!reservation) {
-        return res.status(404).json({ error: 'Reservation not found' });
-      }
-
-      // Construire une chaîne de données à inclure dans le code QR
-      const qrData = `${reservation.dateReservation}|${reservation.dateLivraison}|${reservation.commentaire}|${reservation.lieuReservation}|${reservation.etatReservation}`;
-
-      // Générer le code QR en tant que fichier ou URL
-      const qrCodeImagePath = `./qr_codes/reservation_${reservationId}.png`;
-      await qrcode.toFile(qrCodeImagePath, qrData);
-
-      // Envoyer le chemin du fichier ou l'URL en réponse
-      res.status(200).json({ success: true, qrCode: qrCodeImagePath });
-    } catch (error) {
-      console.error(error);
       res.status(500).json({ error: 'Internal server error' });
     }
   },
