@@ -193,6 +193,94 @@ const eventsController = {
       message: 'Internal server error',
     });
   }
-}
+},
+
+mark_interested: async (req, res) => {
+  try {
+    const userId = '6544f9baeed3721e4513c03e';
+    const eventId = req.params.id;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found',
+      });
+    }
+
+    // Check if the user is already marked as interested
+    if (event.interested.includes(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'User is already marked as interested',
+      });
+    }
+
+    event.interested.push(userId);
+    await event.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'User marked as interested in the event',
+    });
+  } catch (error) {
+    console.error(error);
+    // Handle other errors
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+},
+
+// Mark user as going to an event
+mark_going: async (req, res) => {
+  try {
+    const userId = '6544ea08e814996f0b247b63';
+    const eventId = req.params.id;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found',
+      });
+    }
+
+    // Check if the user is already marked as going
+    if (event.going.includes(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'User is already marked as going',
+      });
+    }
+
+    // Remove user from interested list if already marked as interested
+    const interestedIndex = event.interested.indexOf(userId);
+    if (interestedIndex !== -1) {
+      event.interested.splice(interestedIndex, 1);
+    }
+
+    event.going.push(userId);
+    await event.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'User marked as going to the event',
+    });
+  } catch (error) {
+    console.error(error);
+    // Handle other errors
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+},
+
+
+
 }
 export default eventsController

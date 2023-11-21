@@ -14,6 +14,10 @@ import upload from '../middleware/multer.js';
  */
 //merg
 // routes
+router.post('/:id/interested', eventController.mark_interested);
+router.post('/:id/going', eventController.mark_going);
+
+
 /**
  * @swagger
  * /api/events/create:
