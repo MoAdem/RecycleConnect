@@ -15,5 +15,6 @@ router.get('/scrape-news', async (req, res) => {
     }
   });
     router.get('/',newsController.all_news)
+    router.get('/schedule-news-scraping',newsController.scheduleNewsScraping)
 
 export default router;

@@ -2,8 +2,10 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import News from '../model/News.js';
+import cron from 'node-cron';
 
 const newsController = {
+
 scrapeNewsData : async (url, source, selectors) => {
     try {
       const response = await axios.get(url);
@@ -35,8 +37,7 @@ scrapeNewsData : async (url, source, selectors) => {
     }
   },
   
-
-  scrapeAndSaveNews : async (req, res) => {
+  scrapeAndSaveNews: async (req, res) => {
     try {
       const websites = [
         {
@@ -60,33 +61,43 @@ scrapeNewsData : async (url, source, selectors) => {
             },
           },
 
-
       ];
   
 
       const scrapedNews = await Promise.all(websites.map(site => newsController.scrapeNewsData(site.url, site.source, site.selectors)));
-  
-      const allNews = [].concat(...scrapedNews);
-  
-      try {
-        await News.insertMany(allNews, { ordered: false }); // Use { ordered: false } to ignore duplicate key errors
-      } catch (error) {
-        if (error.code === 11000) {
-          console.warn(`Duplicate key error: ${error.message}`);
-          // Log or handle the duplicate key error if needed
-        } else {
-          console.error(error);
-          res.status(500).json({ message: 'Internal server error', error: error.message });
-          return; // Stop the process if there's another type of error
-        }
-      }
-  
-      res.status(200).json({ message: 'News scraping successful', news: allNews });
+
+    const allNews = [].concat(...scrapedNews);
+
+    try {
+      await News.insertMany(allNews, { ordered: false });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error', error: error.message });
+      if (error.code === 11000) {
+        console.warn(`Duplicate key error: ${error.message}`);
+      } else {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+        return;
+      }
     }
-  },
+
+  } catch (error) {
+    console.error(error);
+  }
+},
+
+scheduleNewsScraping: async (req, res) => {
+  try {
+    cron.schedule('*/1 * * * *', () => {
+      newsController.scrapeAndSaveNews(req, res);
+    });
+
+    res.status(200).json({ message: 'News scraping scheduled successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+},
+
     all_news : async (req, res) => {
       try {
         const news = await News.find();
