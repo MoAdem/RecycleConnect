@@ -3,9 +3,15 @@ import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import twilio from 'twilio';
+
+const accountSid = 'AC3a218b4a1c68a35300afcb50e53f9eb4';
+const authToken = '32a265158079b53eb347d530674fa6fe';
+const twilioPhone = '93150160';
+const client = twilio(accountSid, authToken);
 
 const UserController = {
-  //ajout user 
+  //ajout user (signUp)
   createUser: async (req, res) => {
     const { username, email, address, password, role } = req.body;
 
@@ -109,6 +115,9 @@ const UserController = {
     res.status(500).send('Server Error');
   }
 },
+
+//login 
+
 loginUser: async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -116,10 +125,32 @@ loginUser: async (req, res) => {
     console.log('User found:', user);
     const token = await user.generateAuthToken();
     console.log('Generated token:', token);
+
     res.status(200).json({ message: 'Login successful', user: user, token: token });
+    console.log(user)
   } catch (error) {
     console.error('Login error:', error);
     res.status(401).json({ error: error.message });
+  }
+},
+updatePassword: async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 },
 //reset password 
@@ -136,17 +167,13 @@ forgotPassword: async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
-    //  reset token
-    const resetToken = crypto.randomBytes(20).toString('hex');
-    user.resetToken = resetToken;
-    user.resetTokenExpiration = Date.now() + 3600000; // Token expiration in 1 hour
-
+    const randomPassword = Math.random().toString(36).slice(-8); // Generate an 8-character random password
+    const hashedPassword = await bcrypt.hash(randomPassword, 10);
+    user.password = hashedPassword;
     await user.save();
-
-    // reset link 
-    const resetLink = `http://yourwebsite.com/reset-password?token=${resetToken}`;
-    await sendPasswordResetEmail(email, resetLink);
+   
+    const resetEmail = `Your new password is: ${randomPassword}`;
+    await sendPasswordResetEmail(email, resetEmail);
 
     res.json({ message: 'Password reset email sent successfully' });
   } catch (err) {
@@ -154,8 +181,10 @@ forgotPassword: async (req, res) => {
     res.status(500).send('Server Error');
   }
 },
+
 }
-async function sendPasswordResetEmail(email, resetLink) {
+
+async function sendPasswordResetEmail(email, resetEmail) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -168,11 +197,14 @@ async function sendPasswordResetEmail(email, resetLink) {
     from: 'bouguerrahanine4@gmail.com',
     to: email,
     subject: 'Password Reset',
-    html: `<p>Click the following link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
+    html: `<p>${resetEmail}</p></p>`,
   };
 
   return transporter.sendMail(mailOptions);
 }
+
+
+
 
 
 export default UserController ;

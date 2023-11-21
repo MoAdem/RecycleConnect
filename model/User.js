@@ -17,12 +17,17 @@ const userSchema = new mongoose.Schema({
   address: {
     type: String,
     required: true,
+    
   },
   password: {
     type: String,
     required: true,
   },
- 
+  telephone: {
+    type: Number,
+    required: false,
+  },
+  
   role: {
     type: String,
     enum: ['organization', 'client'], 
