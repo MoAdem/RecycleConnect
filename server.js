@@ -33,23 +33,6 @@ connectToDatabase();
 app.use(cors());
 app.use(bodyParser.json());
 
-const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      title: 'RecycleConnect API',
-      description: 'RecycleConnect API Information',
-      contact: {
-        name: 'Amazing Developer',
-      },
-      servers: ['http://localhost:5000'],
-    },
-  },
-  apis: ['./routes/*.js'],
-};
-
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 app.use('/uploads', express.static('uploads'));
 
 app.use('/api/events', eventRouter);
