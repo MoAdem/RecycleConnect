@@ -5,7 +5,7 @@ import User from '../model/User.js';
 const eventsController = {
  event_create : async (req, res) => {
   try {
-    const organizerId = '6544ea08e814996f0b247b63'; // Replace with authenticated user's ID
+    const organizerId = '6544ea08e814996f0b247b63'; // req.user.id waiting for auth middleware
 
     const organizer = await User.findById(organizerId);
     if (!organizer || organizer.role !== 'organization') {
@@ -14,7 +14,6 @@ const eventsController = {
 
     const { nameEvent, descriptionEvent, addressEvent, startEvent } = req.body;
 
-    // Check if any of the required fields is missing
     if (!nameEvent || !descriptionEvent || !addressEvent || !startEvent) {
       return res.status(400).json({ error: 'All fields are required' });
     }
@@ -78,27 +77,29 @@ const eventsController = {
 },
 
 // Retrieve events by orgID
- event_byorg : async (req, res) => {
+event_byorg: async (req, res) => {
   try {
-    const organizerId = req.params.organizerId;
+    
+    const userId = "6544ea08e814996f0b247b63" //req.user.id waiting for auth middleware
 
-    const organizer = await User.findById(organizerId);
+    const user = await User.findById(userId);
 
-    if (!organizer || organizer.role !== 'organization') {
+    if (!user || user.role !== 'organization') {
       return res.status(404).json({ error: 'Organization not found' });
     }
 
-    const events = await Event.find({ organizer: organizerId });
+    const events = await Event.find({ organizer: userId });
 
     res.status(200).json({ success: true, events });
   } catch (error) {
     console.error(error);
     if (error.name === 'CastError') {
-      return res.status(400).json({ error: 'Invalid organizer ID' });
+      return res.status(400).json({ error: 'Invalid user ID' });
     }
     res.status(500).json({ error: 'Internal server error' });
   }
 },
+
 
 // Update event info
  event_update : async (req, res) => {
@@ -154,7 +155,7 @@ const eventsController = {
  event_delete : async (req, res) => {
   try {
     const eventId = req.params.id;
-    const organizerId = '6544ea08e814996f0b247b63'; // Replace with authenticated user's ID
+    const organizerId = '6544ea08e814996f0b247b63'; //req.user.id waiting for auth middleware
 
     const event = await Event.findById(eventId);
 
@@ -193,6 +194,94 @@ const eventsController = {
       message: 'Internal server error',
     });
   }
-}
+},
+
+mark_interested: async (req, res) => {
+  try {
+    const userId = '6544f9baeed3721e4513c03e';//req.user.id waiting for auth middleware
+    const eventId = req.params.id;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found',
+      });
+    }
+
+    // Check if the user is already marked as interested
+    if (event.interested.includes(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'User is already marked as interested',
+      });
+    }
+
+    event.interested.push(userId);
+    await event.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'User marked as interested in the event',
+    });
+  } catch (error) {
+    console.error(error);
+    // Handle other errors
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+},
+
+// Mark user as going to an event
+mark_going: async (req, res) => {
+  try {
+    const userId = '6544ea08e814996f0b247b63';//req.user.id waiting for auth middleware
+    const eventId = req.params.id;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found',
+      });
+    }
+
+    // Check if the user is already marked as going
+    if (event.going.includes(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'User is already marked as going',
+      });
+    }
+
+    // Remove user from interested list if already marked as interested
+    const interestedIndex = event.interested.indexOf(userId);
+    if (interestedIndex !== -1) {
+      event.interested.splice(interestedIndex, 1);
+    }
+
+    event.going.push(userId);
+    await event.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'User marked as going to the event',
+    });
+  } catch (error) {
+    console.error(error);
+    // Handle other errors
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+},
+
+
+
 }
 export default eventsController
