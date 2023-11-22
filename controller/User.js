@@ -3,15 +3,9 @@ import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import twilio from 'twilio';
-
-const accountSid = 'AC3a218b4a1c68a35300afcb50e53f9eb4';
-const authToken = '32a265158079b53eb347d530674fa6fe';
-const twilioPhone = '93150160';
-const client = twilio(accountSid, authToken);
 
 const UserController = {
-  //ajout user (signUp)
+  //ajout user 
   createUser: async (req, res) => {
     const { username, email, address, password, role } = req.body;
 
@@ -115,9 +109,6 @@ const UserController = {
     res.status(500).send('Server Error');
   }
 },
-
-//login 
-
 loginUser: async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -125,35 +116,22 @@ loginUser: async (req, res) => {
     console.log('User found:', user);
     const token = await user.generateAuthToken();
     console.log('Generated token:', token);
-
     res.status(200).json({ message: 'Login successful', user: user, token: token });
-    console.log(user)
   } catch (error) {
     console.error('Login error:', error);
     res.status(401).json({ error: error.message });
   }
 },
-updatePassword: async (req, res) => {
-  const { email, newPassword } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-    await user.save();
-
-    res.json({ message: 'Password updated successfully' });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
+generateRandomPassword: () => {
+  return crypto.randomBytes(4).toString('hex'); //randomCode
 },
+
 //reset password 
+generateRandomPassword: () => {
+  return crypto.randomBytes(4).toString('hex'); // Generate a random code
+},
+
+// Reset password
 forgotPassword: async (req, res) => {
   const { email } = req.body;
 
@@ -167,24 +145,31 @@ forgotPassword: async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    const randomPassword = Math.random().toString(36).slice(-8); // Generate an 8-character random password
-    const hashedPassword = await bcrypt.hash(randomPassword, 10);
-    user.password = hashedPassword;
-    await user.save();
-   
-    const resetEmail = `Your new password is: ${randomPassword}`;
-    await sendPasswordResetEmail(email, resetEmail);
+    
+    const randomCode = UserController.generateRandomPassword(); // Generate a random code
 
-    res.json({ message: 'Password reset email sent successfully' });
+    const expirationTime = new Date();
+    expirationTime.setMinutes(expirationTime.getMinutes() + 15); // Set expiration time to 15 minutes from now
+
+    const hashedCode = await bcrypt.hash(randomCode, 10);
+    user.randomCode = {
+      code: hashedCode,
+      expiresAt: expirationTime,
+    };
+    
+    await user.save();
+
+    const resetEmail = `This is your code: ${randomCode}`;
+    await UserController.sendPasswordResetEmail(email, resetEmail);
+
+    res.json({ message: 'Password reset code sent successfully' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 },
 
-}
-
-async function sendPasswordResetEmail(email, resetEmail) {
+async sendPasswordResetEmail(email, resetEmail) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -197,14 +182,54 @@ async function sendPasswordResetEmail(email, resetEmail) {
     from: 'bouguerrahanine4@gmail.com',
     to: email,
     subject: 'Password Reset',
-    html: `<p>${resetEmail}</p></p>`,
+    html: `<p>${resetEmail}</p>`,
   };
 
   return transporter.sendMail(mailOptions);
+},
+updatePassword: async (req, res) => {
+  const { email, code, newPassword } = req.body;
+
+  if (!email || !code || !newPassword) {
+    return res.status(400).json({ error: 'Email, code, and new password are required' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const storedCode = user.randomCode;
+
+    if (!storedCode || !storedCode.code || !storedCode.expiresAt || storedCode.expiresAt < new Date()) {
+      return res.status(401).json({ error: 'Invalid or expired code' });
+    }
+
+    const isCodeValid = await bcrypt.compare(code, storedCode.code);
+
+    if (!isCodeValid) {
+      return res.status(401).json({ error: 'Invalid code' });
+    }
+
+    // Reset password logic...
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.randomCode = null; // Clear the random code after successful password reset
+    await user.save();
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+},
+
 }
-
-
-
-
-
 export default UserController ;
+ 
+
+
+
+
