@@ -6,6 +6,8 @@ export function addliv (req,res){
      }else{
          Livraison
          .create({
+
+            //id_res:req.body.id_res,
              Nom_Article:req.body.Nom_Article,
              Nom_Client: req.body.Nom_Client,
              address_mail_Client: req.body.address_mail_Client,

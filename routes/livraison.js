@@ -6,7 +6,10 @@ import { addliv, deleteAllliv, deletelivraa, getOneLivraison, getliv, updatedliv
 const router = express.Router();
 router
 .route('/')
-.post(addliv)
+.post(
+body("address_mail_Client").isEmail() ,
+body("numero_Client").isLength({min:8, max:8}), 
+addliv)
 .delete(deleteAllliv)
 .get(getliv);
 
@@ -18,7 +21,10 @@ router
 .put(updateliv);
 */
 router.route("/:_id")
-.put(updatedlivraa)
+.put(
+body("address_mail_Client").isEmail() ,
+body("numero_Client").isLength({min:8, max:8}),
+updatedlivraa)
 .delete(deletelivraa)
 .get(getOneLivraison)
 

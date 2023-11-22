@@ -24,7 +24,10 @@ router
 .route("/:_id")
 .get(getOncePc)
 .delete(deleteOnePoint)
-.put(multer,UpdatePoint)
+.put(multer,
+body("address_mail_Pc").isEmail() ,
+body("numero_tel").isLength({min:8, max:8}),
+UpdatePoint)
 
 
 

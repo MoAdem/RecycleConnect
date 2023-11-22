@@ -8,6 +8,7 @@ export function addres(req,res){
     }else{
         ReservationPc
         .create({
+            //id_r:req.body.id_r,
             Nom_R: req.body.Nom_R,
             id_Pc:req.body.id_Pc
         })
