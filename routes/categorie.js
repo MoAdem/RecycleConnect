@@ -13,7 +13,7 @@ import { CreateCategorie,
 const router = express.Router();
 router
 .route('/')
-.post(upload.array('PhotoCategorie'),CreateCategorie)
+.post(upload.single('PhotoCategorie'),CreateCategorie)
 .get(GetAllCategories);
 
 router

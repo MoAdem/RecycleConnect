@@ -15,7 +15,7 @@ const router = express.Router();
 
 router
 .route('/')
-.post(upload.array('PhotosArticle'),CreateArticle)
+.post(upload.single('PhotoArticle'),CreateArticle)
 .get(GetAllArticles);
 
 router

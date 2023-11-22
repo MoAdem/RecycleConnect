@@ -9,12 +9,10 @@ export async function CreateArticle(req, res) {
     res.status(400).json({ error: 'Champs vides !' });
  }
 
- const photos = req.files.map(
-    (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename
- );
+ const photo = req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
 
  const nouvArticle = await Article.create
-    ({PhotosArticle: photos, 
+    ({PhotoArticle: photo, 
       NomArticle,
       DescriptionArticle, 
       EtatArticle, 
@@ -79,8 +77,7 @@ export async function GetArticleById(req, res){
 export async function UpdateArticle (req, res){
   try {
     const existingarticle = await Article.findById(req.params.id);
-    existingarticle.PhotosArticle = req.files.map(
-      (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
+    existingarticle.PhotoArticle = req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
     existingarticle.NomArticle = req.body.NomArticle; 
     existingarticle.DescriptionArticle = req.body.DescriptionArticle;
     existingarticle.EtatArticle = req.body.EtatArticle;

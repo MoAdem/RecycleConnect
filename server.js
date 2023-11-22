@@ -18,6 +18,9 @@ const port = process.env.PORT;
 
 connectToDatabase();
 app.use(cors());
+app.use('/uploads', express.static('uploads'));
+
+
 app.use(bodyParser.json());
 
 app.use('/api/articles', articleRoutes); 

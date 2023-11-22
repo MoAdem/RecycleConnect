@@ -21,10 +21,10 @@ export async function CreateCategorie(req, res) {
      return res.status(400).json({ error: "Cette catégorie existe déjà !" });
   }
   
-  const photos = req.files.map((file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
+  const photo = req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
   try {
      const nouvcategorie = await Categorie.create({
-       PhotoCategorie: photos,
+       PhotoCategorie: photo,
        NomCategorie: req.body.NomCategorie,
        NbreTotalArticles: req.body.NbreTotalArticles,
      });
@@ -107,8 +107,7 @@ export async function UpdateCategorie(req, res) {
      if (!existingCategory) {
        return res.status(400).json({ error: "Cette catégorie n'existe pas." });
      }
-     existingCategory.PhotoCategorie = req.files.map(
-      (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
+     existingCategory.PhotoCategorie = req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
      existingCategory.NomCategorie = NomCategorie;
      existingCategory.NbreTotalArticles = NbreTotalArticles;
  
