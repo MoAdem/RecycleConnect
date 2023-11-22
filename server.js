@@ -3,9 +3,9 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import connectToDatabase from './database.js';
 import { notFoundError,errorHandler } from './middleware/error-handler.js';
-
-import swaggerJsdoc from 'swagger-jsdoc';
+//swagger ui
 import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './middleware/swaggerConfig.js';
 //routes
 import eventRouter from './routes/events.js';
 import donationRouter from './routes/donation.js';
@@ -69,6 +69,9 @@ app.use('/api/categories', categorieRoutes);
 app.use('/api/reviews', reviewRoutes);
 
 app.use('/api/user',userRouter)
+
+//swagger ui
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 
