@@ -3,6 +3,9 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import connectToDatabase from './database.js';
 import { notFoundError,errorHandler } from './middleware/error-handler.js';
+
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 //routes
 import eventRouter from './routes/events.js';
 import donationRouter from './routes/donation.js';
@@ -29,6 +32,23 @@ const port = process.env.PORT
 connectToDatabase();
 app.use(cors());
 app.use(bodyParser.json());
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: 'RecycleConnect API',
+      description: 'RecycleConnect API Information',
+      contact: {
+        name: 'Amazing Developer',
+      },
+      servers: ['http://localhost:5000'],
+    },
+  },
+  apis: ['./routes/*.js'],
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/uploads', express.static('uploads'));
 
