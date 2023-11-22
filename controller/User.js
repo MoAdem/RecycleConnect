@@ -122,7 +122,16 @@ loginUser: async (req, res) => {
     res.status(401).json({ error: error.message });
   }
 },
+generateRandomPassword: () => {
+  return crypto.randomBytes(4).toString('hex'); //randomCode
+},
+
 //reset password 
+generateRandomPassword: () => {
+  return crypto.randomBytes(4).toString('hex'); // Generate a random code
+},
+
+// Reset password
 forgotPassword: async (req, res) => {
   const { email } = req.body;
 
@@ -136,26 +145,31 @@ forgotPassword: async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
+    
+    const randomCode = UserController.generateRandomPassword(); // Generate a random code
 
-    //  reset token
-    const resetToken = crypto.randomBytes(20).toString('hex');
-    user.resetToken = resetToken;
-    user.resetTokenExpiration = Date.now() + 3600000; // Token expiration in 1 hour
+    const expirationTime = new Date();
+    expirationTime.setMinutes(expirationTime.getMinutes() + 15); // Set expiration time to 15 minutes from now
 
+    const hashedCode = await bcrypt.hash(randomCode, 10);
+    user.randomCode = {
+      code: hashedCode,
+      expiresAt: expirationTime,
+    };
+    
     await user.save();
 
-    // reset link 
-    const resetLink = `http://yourwebsite.com/reset-password?token=${resetToken}`;
-    await sendPasswordResetEmail(email, resetLink);
+    const resetEmail = `This is your code: ${randomCode}`;
+    await UserController.sendPasswordResetEmail(email, resetEmail);
 
-    res.json({ message: 'Password reset email sent successfully' });
+    res.json({ message: 'Password reset code sent successfully' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 },
-}
-async function sendPasswordResetEmail(email, resetLink) {
+
+async sendPasswordResetEmail(email, resetEmail) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -168,11 +182,54 @@ async function sendPasswordResetEmail(email, resetLink) {
     from: 'bouguerrahanine4@gmail.com',
     to: email,
     subject: 'Password Reset',
-    html: `<p>Click the following link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
+    html: `<p>${resetEmail}</p>`,
   };
 
   return transporter.sendMail(mailOptions);
+},
+updatePassword: async (req, res) => {
+  const { email, code, newPassword } = req.body;
+
+  if (!email || !code || !newPassword) {
+    return res.status(400).json({ error: 'Email, code, and new password are required' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const storedCode = user.randomCode;
+
+    if (!storedCode || !storedCode.code || !storedCode.expiresAt || storedCode.expiresAt < new Date()) {
+      return res.status(401).json({ error: 'Invalid or expired code' });
+    }
+
+    const isCodeValid = await bcrypt.compare(code, storedCode.code);
+
+    if (!isCodeValid) {
+      return res.status(401).json({ error: 'Invalid code' });
+    }
+
+    // Reset password logic...
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.randomCode = null; // Clear the random code after successful password reset
+    await user.save();
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+},
+
 }
-
-
 export default UserController ;
+ 
+
+
+
+
