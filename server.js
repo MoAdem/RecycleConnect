@@ -19,6 +19,7 @@ import articleRoutes from'./routes/article.js';
 import categorieRoutes from'./routes/categorie.js';
 import newsRouter from './routes/news.js';
 import reviewRoutes from'./routes/review.js';
+import reservationPcRoutes from './routes/reservationPc.js';
 //test user
 // import userRoutes from './routes/user.js';
 //merge
@@ -45,6 +46,7 @@ app.use('/api/panier', panierRouter);
 app.use('/pointCollecte',pointCollecteRoutes);
 app.use('/livraison',livraisonRoutes);
 app.use('/verifierProduit',verifierProduitRoutes)
+app.use('/reservationPc',reservationPcRoutes)
 
 
 app.use('/api/articles', articleRoutes); 
