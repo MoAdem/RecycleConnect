@@ -3,6 +3,12 @@ const {Schema,model,Types }=mongoose;
 
 const livraisonSchema = new Schema(
     {
+        /* id_res:{
+            type: Types.ObjectId,
+            ref:'Reservation',
+            required:true
+        },*/
+
         Nom_Article:{
             type:String,
             required:true
