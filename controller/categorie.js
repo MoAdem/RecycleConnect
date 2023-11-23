@@ -136,7 +136,7 @@ export const SearchCategorieByNom = async (req, res) => {
     const specialNomCategorie = nomCategorie.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     const categorie = await Categorie.findOne({ NomCategorie: { $regex: new RegExp(specialNomCategorie, 'i') },
    });
-   //console.log('Found Categorie:', categprie);
+   //console.log('Found Categorie:', categorie);
       return res.status(200).json({ categorie });
    } catch (error) {
       return res.status(400).json({ error: error.message || "Erreur !" });
