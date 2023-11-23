@@ -2,15 +2,15 @@ import Categorie from '../model/categorie.js';
 import nodemailer from 'nodemailer';
 
 
-export async function createcategorie(req, res) {
-  const { NomCategorie, NbreTotalCategories } = req.body;
+export async function CreateCategorie(req, res) {
+  const { NomCategorie, NbreTotalArticles } = req.body;
  
-  if (!NomCategorie || !NbreTotalCategories) 
+  if (!NomCategorie || !NbreTotalArticles) 
   {
      return res.status(400).json({ error: "Champs vides !" });
   }
  
-  if (NbreTotalCategories < 0) 
+  if (NbreTotalArticles < 0) 
   {
      return res.status(400).json({ error: "Nombre d'Categories négatif !" });
   }
@@ -21,15 +21,14 @@ export async function createcategorie(req, res) {
      return res.status(400).json({ error: "Cette catégorie existe déjà !" });
   }
   
-  const photos = null;
-  //req.files.map((file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
+  const photo = req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
   try {
      const nouvcategorie = await Categorie.create({
-       PhotoCategorie: photos,
+       PhotoCategorie: photo,
        NomCategorie: req.body.NomCategorie,
-       NbreTotalCategories: req.body.NbreTotalCategories,
+       NbreTotalArticles: req.body.NbreTotalArticles,
      });
-     sendMail('mariem.marsaoui@esprit.tn', 
+     SendMail('mariem.marsaoui@esprit.tn', 
     'Important de la part de RecycleConnect', 
     '','De nouvelles Catégorie ont été ajoutés ! <br> Pour plus de détails, visiter notre plateforme !');
      return res.status(200).json(nouvcategorie);
@@ -38,7 +37,7 @@ export async function createcategorie(req, res) {
   }
  }
 
- async function sendMail(to, subject, text, html) 
+ async function SendMail(to, subject, text, html) 
 {
   try {
       const transporter = nodemailer.createTransport({
@@ -64,7 +63,7 @@ export async function createcategorie(req, res) {
 
 
 
-export async function getAllCategories(req, res) {
+export async function GetAllCategories(req, res) {
   try {
      const categories = await Categorie.find();
      res.status(200).json(categories);
@@ -74,7 +73,7 @@ export async function getAllCategories(req, res) {
  }
 
  
-export async function getcategorieById (req, res) {
+export async function GetCategorieById (req, res) {
   try {
   const categorie = await Categorie.findById(req.params.id)
    res.status(200).json(categorie); 
@@ -92,14 +91,14 @@ export async function getcategorieById (req, res) {
 }
  */
 
-export async function updatecategorie(req, res) {
-  const { NomCategorie, NbreTotalCategories } = req.body;
+export async function UpdateCategorie(req, res) {
+  const { NomCategorie, NbreTotalArticles} = req.body;
  
-  if (!NomCategorie || !NbreTotalCategories) {
+  if (!NomCategorie || !NbreTotalArticles) {
      return res.status(400).json({ error: "Champs vides !" });
   }
  
-  if (NbreTotalCategories < 0) {
+  if (NbreTotalArticles < 0) {
      return res.status(400).json({ error: "Nombre d'Categories négatif !" });
   }
  
@@ -108,10 +107,9 @@ export async function updatecategorie(req, res) {
      if (!existingCategory) {
        return res.status(400).json({ error: "Cette catégorie n'existe pas." });
      }
-     existingCategory.PhotoCategorie = req.files.map(
-      (file) => req.protocol + "://" + req.get("host") + "/uploads/" + file.filename);
+     existingCategory.PhotoCategorie = req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
      existingCategory.NomCategorie = NomCategorie;
-     existingCategory.NbreTotalCategories = NbreTotalCategories;
+     existingCategory.NbreTotalArticles = NbreTotalArticles;
  
      const updatedCategory = await existingCategory.save();
      return res.status(200).json(updatedCategory);
@@ -122,7 +120,7 @@ export async function updatecategorie(req, res) {
 
 
 
-export async function deletecategorie (req, res) {
+export async function DeleteCategorie (req, res) {
   try {
   const categorie = await Categorie.findByIdAndRemove(req.params.id);
   res.json({ message: 'categorie supprimée' });
@@ -131,21 +129,21 @@ export async function deletecategorie (req, res) {
 }
 
 
-export const searchCategorieByNom = async (req, res) => {
+export const SearchCategorieByNom = async (req, res) => {
    try {
       const nomCategorie = req.params.NomCategorie.trim();
     //console.log('NomCategorie:', nomCategorie);
     const specialNomCategorie = nomCategorie.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     const categorie = await Categorie.findOne({ NomCategorie: { $regex: new RegExp(specialNomCategorie, 'i') },
    });
-   //console.log('Found Categorie:', categprie);
+   //console.log('Found Categorie:', categorie);
       return res.status(200).json({ categorie });
    } catch (error) {
       return res.status(400).json({ error: error.message || "Erreur !" });
    }
  }
 
- export const sortCategoriesByNomAsc = async (req, res) => {
+ export const SortCategoriesByNomAsc = async (req, res) => {
    try {
      const categories = await Categorie.find().sort({ NomCategorie: 1 });
      return res.status(200).json({ categories });

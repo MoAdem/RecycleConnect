@@ -3,7 +3,7 @@ const {Schema,model,Types}=mongoose;
 
 
 const articleSchema = new Schema({
-  PhotosArticle: [],
+  PhotoArticle: String,
   NomArticle: String,
   DescriptionArticle: String,
   EtatArticle: String,
