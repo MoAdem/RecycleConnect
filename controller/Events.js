@@ -5,10 +5,10 @@ import User from '../model/User.js';
 const eventsController = {
  event_create : async (req, res) => {
   try {
-    const organizerId = '6544ea08e814996f0b247b63'; // req.user.id waiting for auth middleware
+    const organizerId = '655f0d2272279d25ceec93f5'; // req.user.id waiting for auth middleware
 
     const organizer = await User.findById(organizerId);
-    if (!organizer || organizer.role !== 'organization') {
+    if (!organizer || organizer.role !== 'client') {//organisation
       return res.status(403).json({ error: 'Unauthorized access' });
     }
 

@@ -87,7 +87,7 @@ scrapeNewsData : async (url, source, selectors) => {
 
 scheduleNewsScraping: async (req, res) => {
   try {
-    cron.schedule('0 0 * * *', () => {
+    cron.schedule('0 0 * * *', () => { //*/30 * * * * *
       newsController.scrapeAndSaveNews(req, res);
     });
 
