@@ -96,7 +96,7 @@ Categorie.findByIdAndUpdate(req.params.id)
 
 export async function UpdateCategorie(req, res) {
   const { NomCategorie, NbreTotalArticles } = req.body;
-  if (!NomCategorie || !NbreTotalArticles) {
+  if ( !NomCategorie || !NbreTotalArticles) {
     return res.status(400).json({ error: "Champs vides !" });
   }
   if (NbreTotalArticles < 0) {
