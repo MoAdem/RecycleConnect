@@ -9,7 +9,7 @@ const eventsController = {
     const organizerId ="65746c185afcfaae3d4b5704"// req.user.id waiting for auth middleware
 
     const organizer = await User.findById(organizerId);
-    if (!organizer || organizer.role !== 'organization') {//organisation
+    if (!organizer || organizer.role !== 'organization') {
       return res.status(403).json({ error: 'Unauthorized access' });
     }
 
@@ -19,7 +19,7 @@ const eventsController = {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
-    // single photo
+    // single photo upload to cloudinary
     const photo = req.file ? await uploadToCloudinary(req.file.path) : '';
     async function uploadToCloudinary(filePath) {
       try {
