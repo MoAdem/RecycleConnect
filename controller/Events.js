@@ -1,14 +1,15 @@
 import Event from '../model/Events.js';
 import User from '../model/User.js';
+import cloudinary from '../middleware/cloudinary.js';
 
 // Create an event
 const eventsController = {
  event_create : async (req, res) => {
   try {
-    const organizerId = '655f0d2272279d25ceec93f5'; // req.user.id waiting for auth middleware
+    const organizerId ="65746c185afcfaae3d4b5704"// req.user.id waiting for auth middleware
 
     const organizer = await User.findById(organizerId);
-    if (!organizer || organizer.role !== 'client') {//organisation
+    if (!organizer || organizer.role !== 'organization') {//organisation
       return res.status(403).json({ error: 'Unauthorized access' });
     }
 
@@ -19,9 +20,15 @@ const eventsController = {
     }
 
     // single photo
-    const photo = req.file
-      ? req.protocol + '://' + req.get('host') + '/uploads/' + req.file.filename
-      : '';
+    const photo = req.file ? await uploadToCloudinary(req.file.path) : '';
+    async function uploadToCloudinary(filePath) {
+      try {
+        const result = await cloudinary.uploader.upload(filePath);
+        return result.secure_url;
+      } catch (error) {
+        throw error;
+      }
+    }
 
 
     const event = new Event({
