@@ -162,7 +162,7 @@ event_byorg: async (req, res) => {
  event_delete : async (req, res) => {
   try {
     const eventId = req.params.id;
-    const organizerId = '6544ea08e814996f0b247b63'; //req.user.id waiting for auth middleware
+    const organizerId = '65746c185afcfaae3d4b5704'; //req.user.id waiting for auth middleware
 
     const event = await Event.findById(eventId);
 
