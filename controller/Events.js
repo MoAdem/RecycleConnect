@@ -4,56 +4,58 @@ import cloudinary from '../middleware/cloudinary.js';
 
 // Create an event
 const eventsController = {
- event_create : async (req, res) => {
-  try {
-    const organizerId ="65746c185afcfaae3d4b5704"// req.user.id waiting for auth middleware
-
-    const organizer = await User.findById(organizerId);
-    if (!organizer || organizer.role !== 'organization') {
-      return res.status(403).json({ error: 'Unauthorized access' });
+   uploadToCloudinary : async (base64String) => {
+    try {
+      const result = await cloudinary.uploader.upload(`data:image/jpeg;base64,${base64String}`);
+      return result.secure_url;
+    } catch (error) {
+      throw error;
     }
-
-    const { nameEvent, descriptionEvent, addressEvent, startEvent } = req.body;
-
-    if (!nameEvent || !descriptionEvent || !addressEvent || !startEvent) {
-      return res.status(400).json({ error: 'All fields are required' });
-    }
-
-    // single photo upload to cloudinary
-    const photo = req.file ? await uploadToCloudinary(req.file.path) : '';
-    async function uploadToCloudinary(filePath) {
-      try {
-        const result = await cloudinary.uploader.upload(filePath);
-        return result.secure_url;
-      } catch (error) {
-        throw error;
+  },
+  
+   event_create : async (req, res) => {
+    try {
+      const organizerId = "65746c185afcfaae3d4b5704"; // req.user.id waiting for auth middleware
+  
+      const organizer = await User.findById(organizerId);
+      if (!organizer || organizer.role !== 'organization') {
+        return res.status(403).json({ error: 'Unauthorized access' });
       }
+  
+      const { nameEvent, descriptionEvent, addressEvent, startEvent, PhotoEvent } = req.body;
+  
+      if (!nameEvent || !descriptionEvent || !addressEvent || !startEvent || !PhotoEvent) {
+        return res.status(400).json({ error: 'All fields are required' });
+      }
+  
+      // Decode the base64 string and upload to Cloudinary
+      const photo = await eventsController.uploadToCloudinary(PhotoEvent);
+  
+      const event = new Event({
+        nameEvent,
+        descriptionEvent,
+        addressEvent,
+        startEvent,
+        PhotoEvent: photo,
+        organizer: organizerId,
+      });
+  
+      await event.save();
+  
+      res.status(201).json({ success: true, event });
+    } catch (error) {
+      console.error(error);
+  
+      if (error.name === 'ValidationError') {
+        const errors = Object.values(error.errors).map((err) => err.message);
+        return res.status(400).json({ error: errors });
+      }
+  
+      res.status(500).json({ error: 'Internal server error' });
     }
-
-
-    const event = new Event({
-      nameEvent,
-      descriptionEvent,
-      addressEvent,
-      startEvent,
-      PhotoEvent: photo,
-      organizer: organizerId,
-    });
-
-    await event.save();
-
-    res.status(201).json({ success: true, event });
-  } catch (error) {
-    console.error(error);
-
-    if (error.name === 'ValidationError') {
-      const errors = Object.values(error.errors).map((err) => err.message);
-      return res.status(400).json({ error: errors });
-    }
-
-    res.status(500).json({ error: 'Internal server error' });
-  }
-},
+  },
+  
+  
 
 // Retrieve all events
  all_events : async (req, res) => {
