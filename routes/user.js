@@ -42,4 +42,3 @@ router.post('/:id/ban', UserController.banUser);
 export default router;
 
 
-

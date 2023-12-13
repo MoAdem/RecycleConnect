@@ -32,7 +32,7 @@ required: false,
 },
 resetCode: {
   type:String,
-  required: true,
+  required: false,
 },
 isBanned: { 
     type: Boolean, 
@@ -93,6 +93,5 @@ next();
 
 const User = mongoose.model('User', userSchema);
 export default User;
-
 
 
