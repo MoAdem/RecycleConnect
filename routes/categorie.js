@@ -27,7 +27,7 @@ router
 router
 .route('/:id')
 .get(GetCategorieById)
-.put(UpdateCategorie)
+.put(upload.single('PhotoCategorie'),UpdateCategorie)
 .delete(DeleteCategorie);
 
 

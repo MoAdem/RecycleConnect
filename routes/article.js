@@ -29,7 +29,7 @@ router
 router
 .route('/:id')
 .get(GetArticleById)
-.put(UpdateArticle)
+.put(upload.single('PhotoArticle'),UpdateArticle)
 .delete(DeleteArticle);
 
 
