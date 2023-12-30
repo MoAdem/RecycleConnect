@@ -20,10 +20,10 @@ const pointCollecteSchema= new Schema(
             required:true
         },
         
-        image:{
+       /* image:{
             type:String,
             required:true
-        },
+        },*/
         
         x:{
             type:Number,
@@ -38,4 +38,7 @@ const pointCollecteSchema= new Schema(
         timestamps: true
     }
 );
+pointCollecteSchema.statics.countReservationsPc = function (pointCollecteId) {
+    return ReservationPc.countDocuments({ id_Pc: pointCollecteId });
+};
 export default model ('pointCollecte',pointCollecteSchema);

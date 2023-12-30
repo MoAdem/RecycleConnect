@@ -1,15 +1,23 @@
 import express from 'express';
 import { body } from 'express-validator'
 import multer from '../middleware/multer-config.js';
-import { UpdatePoint, addPc, deleteAllPc, deleteOnePoint, getOncePc, getPc} from '../controller/PointCollecte.js';
+import { InactivePc, UpdatePoint, actif, addPc, countTotalPc, deleteAllPc, deleteOnePoint, getOncePc, getPc} from '../controller/PointCollecte.js';
 
 
 
 const router = express.Router();
-
+router
+.route('/countTotalPc')
+.get(countTotalPc);
+router
+.route('/countInactivePoints')
+.get(InactivePc);
+router
+.route('/ActifPoints')
+.get(actif);
 router
 .route('/')
-.post(multer,
+.post(
 body("address_mail_Pc").isEmail() ,
 body("numero_tel").isLength({min:8, max:8}),
 addPc)
@@ -24,7 +32,7 @@ router
 .route("/:_id")
 .get(getOncePc)
 .delete(deleteOnePoint)
-.put(multer,
+.put(
 body("address_mail_Pc").isEmail() ,
 body("numero_tel").isLength({min:8, max:8}),
 UpdatePoint)
