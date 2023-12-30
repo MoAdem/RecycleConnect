@@ -78,6 +78,16 @@ export function updatedlivraa(req,res){
     res.status(400).json({error:err});
   });
 }
+export function countLiv(req,res){
+  Livraison
+  .estimatedDocumentCount()
+  .then((count) =>{
+    res.status(200).json({totalLivraisons: count});
+})
+.catch((err) => {
+  res.status(500).json({error: err})
+})
+}
 export function getOneLivraison(req,res){
   Livraison
   .findById({_id : req.params._id})
