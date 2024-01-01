@@ -41,7 +41,7 @@ isBanned: {
 
 role: {
 type: String,
-enum: ['organization', 'client'],
+enum: ['organization', 'client','admin'],
 default: 'client',
 },
 org_description: {
