@@ -1,9 +1,21 @@
 import express from 'express';
 import {body} from 'express-validator'
-import { addliv, deleteAllliv, deletelivraa, getOneLivraison, getliv, updatedlivraa} from '../controller/Livraison.js';
+import { addliv, countLiv, deleteAllliv, deletelivraa, getOneLivraison, getliv, updatedlivraa} from '../controller/Livraison.js';
+import { countAndShow, statliv } from '../controller/livreur.js';
 
 
 const router = express.Router();
+router.
+route("/livraison_livree")
+.post(
+    body("idLivraison").notEmpty(),
+    body("etat").isBoolean(),
+    statliv
+  )
+  .get(countAndShow);
+  router
+.route("/countLiv")
+.get(countLiv);
 router
 .route('/')
 .post(

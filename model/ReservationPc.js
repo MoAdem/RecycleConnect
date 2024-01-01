@@ -14,7 +14,7 @@ const reservationPcSchema= new Schema(
         },
         id_Pc:{
             type: Types.ObjectId,
-            red:'Livraison',
+            red:'PointCollecte',
             required:true
         }
 

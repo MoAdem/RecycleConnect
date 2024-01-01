@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import Livraison from "../model/Livraison.js";
+import PointCollecte from "../model/PointCollecte.js";
 import ReservationPc from "../model/ReservationPc.js";
 
 export function addres(req,res){

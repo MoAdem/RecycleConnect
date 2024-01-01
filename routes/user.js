@@ -28,13 +28,17 @@ router.delete('/:id/delete', UserController.deleteUser);
 router.post('/login', UserController.loginUser);
 
 
-router.post ('/reset',UserController.forgotPassword);
+router.post ('/reset',UserController.sendActivationCode);
 
+router.post ('/verify',UserController.verifyCode);
 
-router.post ('/updatepassword',UserController.updatePassword);
+router.post ('/forgot',UserController.forgotPassword);
 
+//router.post ('/verify',UserController.verifyCode);
 
+//router.post ('/updatepassword',UserController.updatePassword);
+
+router.post('/:id/ban', UserController.banUser);
 export default router;
-
 
 

@@ -30,6 +30,15 @@ telephone: {
 type: Number,
 required: false,
 },
+resetCode: {
+  type:String,
+  required: false,
+},
+isBanned: { 
+    type: Boolean, 
+    default: false },
+    
+
 role: {
 type: String,
 enum: ['organization', 'client'],
@@ -41,11 +50,9 @@ required: function() {
 return this.role === 'organization';
 },
 },
-passwordResetCode: {
-type: String,
-required: false,
-},
+
 });
+
 
 
 //generate_token_jwt
@@ -86,6 +93,5 @@ next();
 
 const User = mongoose.model('User', userSchema);
 export default User;
-
 
 
