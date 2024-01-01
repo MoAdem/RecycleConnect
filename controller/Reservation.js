@@ -10,7 +10,7 @@ const reservationController = {
       }
 
       // Récupérer l'ID de l'utilisateur connecté depuis la session ou le JWT
-      const userId = req.user.id;  
+      //const userId = req.user.id;  
 
       const reservation = new Reservation({
         dateReservation,
@@ -18,7 +18,7 @@ const reservationController = {
         commentaire,
         lieuReservation,
         etatReservation,
-        userId,  // Ajouter l'ID de l'utilisateur à la réservation
+        //userId,  // Ajouter l'ID de l'utilisateur à la réservation
       });
 
       await reservation.save();
