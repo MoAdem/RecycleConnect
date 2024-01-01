@@ -11,13 +11,13 @@ createUser: async (req, res) => {
 const { username, email, address,telephone, password, role } = req.body;
 
 
-if (!username || !email || !address || !password || !telephone || !role) {
+if (!username || !email || !address || !password  || !role) {
 return res.status(400).json({ error: 'All fields are required' });
 }
 
 
 try {
-let existingUser = await User.findOne({ email });
+let existingUser = await User.findOne({ username });
 if (existingUser) {
 return res.status(400).json({ error: 'User already exists' });
 }
@@ -185,20 +185,82 @@ res.status(500).send('Server Error');
 }
 },
 
-
 loginUser: async (req, res) => {
-const { username, password } = req.body;
-try {
-const user = await User.findByCredentials(username, password);
-console.log('User found:', user);
-const token = await user.generateAuthToken();
-console.log('Generated token:', token);
-res.status(200).json({ message: 'Login successful', user: user, token: token });
-} catch (error) {
-console.error('Login error:', error);
-res.status(401).json({ error: error.message });
-}
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findByCredentials(username, password);
+
+    if (user.isBanned) {
+      return res.status(403).json({ error: 'User is banned. Cannot login' });
+    }
+
+    const token = await user.generateAuthToken();
+    res.status(200).json({ message: 'Login successful', user, token });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(401).json({ error: error.message });
+  }
 },
+
+loginAdmin: async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findByCredentials(username, password);
+
+    if (user.role !== 'admin') {
+      throw new Error('Access denied. Only admin users are allowed.');
+    }
+
+    if (user.isBanned) {
+      throw new Error('Admin user is banned. Cannot login.');
+    }
+
+    const token = await user.generateAuthToken();
+    console.log('Generated token:', token);
+    res.status(200).json({ message: 'Admin login successful', user, token });
+  } catch (error) {
+    console.error('Admin login error:', error);
+    res.status(401).json({ error: error.message });
+  }
+},
+
+createAdmin: async (req, res) => {
+  const { username, email, password, role } = req.body;
+  
+  
+  if (!username || !email || !password  || !role) {
+  return res.status(400).json({ error: 'All fields are required' });
+  }
+  
+  
+  try {
+  let existingUser = await User.findOne({ email });
+  if (existingUser) {
+  return res.status(400).json({ error: 'admin already exists' });
+  }
+  
+  
+  const newUser = new User({
+  username,
+  email,
+  password,
+  role,
+  });
+  
+  
+  await newUser.save();
+  
+  
+  res.status(201).json({ message: 'Admin created successfully', user: newUser });
+  } catch (err) {
+  console.error(err.message);
+  res.status(500).send('Server Error');
+  }
+  },
+
+
 
 
 sendActivationCode: async (req, res) => {
@@ -304,7 +366,6 @@ changePassword: async (req, res) => {
 },
 };
 export default UserController ;
-
 
 
 
