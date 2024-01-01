@@ -288,6 +288,40 @@ mark_going: async (req, res) => {
   }
 },
 
+//update event  cordinates longitudeaddress and latitudeaddress
+update_cordinates: async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const { longitudeaddress, latitudeaddress } = req.body;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found',
+      });
+    }
+
+    event.longitudeaddress = longitudeaddress;
+    event.latitudeaddress = latitudeaddress;
+    await event.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Event cordinates updated successfully',
+    });
+  } catch (error) {
+    console.error(error);
+    // Handle other errors
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+},
+
+
 
 
 }

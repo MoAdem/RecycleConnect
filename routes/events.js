@@ -16,6 +16,7 @@ import upload from '../middleware/multer.js';
 // routes
 router.post('/:id/interested', eventController.mark_interested);
 router.post('/:id/going', eventController.mark_going);
+router.put('/:id/coordinates', eventController.update_cordinates);
 
 
 /**

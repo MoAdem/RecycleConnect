@@ -20,6 +20,14 @@ const eventSchema = mongoose.Schema({
     default: '',
   },
   addressEvent: String,
+  latitudeaddress: {
+    type: Number,
+    default: 0.0,
+},
+  longitudeaddress: {
+    type: Number,
+    default: 0.0,
+},
   // status: {
   //     type: String,
   //     enum: ['ongoing','' ,'Canceled'],
