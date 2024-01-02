@@ -74,7 +74,7 @@ console.error('Error sending email:', error);
 
 export async function GetAllArticles(req, res) {
 try {
-const articles = await Article.find();
+const articles = await Article.find().populate('Categorie', 'NomCategorie');
 res.status(200).json(articles);
 } catch (error) {
 res.status(400).json({ error: 'Erreur de l affichage de tous les articles' });
