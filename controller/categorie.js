@@ -15,14 +15,15 @@ const existingCategory = await Categorie.findOne({ NomCategorie });
 if (existingCategory) {
 return res.status(400).json({ error: "Cette catégorie existe déjà !" });
 }
-try {
+/*try {
 if (!req.file) {
 return res.status(400).json({ error: 'Aucune photo fournie !' });
 }
 const cloudinaryResponse = await cloudinary.uploader.upload(
 `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`
-);
-const photo = cloudinaryResponse.secure_url;
+);*/
+const photo = req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
+try{
 const nouvcategorie = await Categorie.create({
 PhotoCategorie: photo,
 NomCategorie: req.body.NomCategorie,
@@ -158,6 +159,7 @@ return res.status(200).json({ categories });
 return res.status(400).json({ message: 'Erreur !' });
 }
 }
+
 
 
 

@@ -6,4 +6,4 @@ const router = express.Router();
 router
 .route('/')
 .post(verfi);
-export default router;
+export default router;  

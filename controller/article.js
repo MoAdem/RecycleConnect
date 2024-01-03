@@ -9,7 +9,7 @@ const { NomArticle, DescriptionArticle, EtatArticle, CategorieId } = req.body;
 if (!NomArticle || !DescriptionArticle || !EtatArticle || !CategorieId) {
 return res.status(400).json({ error: 'Champs vides!' });}
 
-try {
+/*try {
 if (!req.file) {
 return res.status(400).json({ error: 'Auncune photo jointe!' });
 }
@@ -18,8 +18,9 @@ const cloudinaryResponse = await cloudinary.uploader.upload(
 `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`
 );
 
-const photo = cloudinaryResponse.secure_url;
-
+const photo = cloudinaryResponse.secure_url;*/
+const photo = req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
+try{
 const nouvArticle = await Article.create({
 PhotoArticle: photo,
 NomArticle,
@@ -74,7 +75,7 @@ console.error('Error sending email:', error);
 
 export async function GetAllArticles(req, res) {
 try {
-const articles = await Article.find();
+const articles = await Article.find().populate('Categorie', 'NomCategorie');
 res.status(200).json(articles);
 } catch (error) {
 res.status(400).json({ error: 'Erreur de l affichage de tous les articles' });
@@ -154,6 +155,7 @@ return res.status(200).json({ articles });
 return res.status(400).json({ message: 'Erreur !' });
 }
 }
+
 
 
 
