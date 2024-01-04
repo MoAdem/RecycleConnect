@@ -15,26 +15,37 @@ const existingCategory = await Categorie.findOne({ NomCategorie });
 if (existingCategory) {
 return res.status(400).json({ error: "Cette catégorie existe déjà !" });
 }
-/*try {
+try {
 if (!req.file) {
 return res.status(400).json({ error: 'Aucune photo fournie !' });
 }
 const cloudinaryResponse = await cloudinary.uploader.upload(
 `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`
-);*/
-const photo = req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
-try{
+);
+const photo = cloudinaryResponse.secure_url;
 const nouvcategorie = await Categorie.create({
 PhotoCategorie: photo,
 NomCategorie: req.body.NomCategorie,
 NbreTotalArticles: req.body.NbreTotalArticles,
 });
+const htmlString = `
+<body style='font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; margin: 0; padding: 0;'>
+  <table width='100%' cellpadding='0' style='max-width: 600px; margin: 20px auto; background-color: #fff; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);'>
+    <tr>
+      <td style='padding: 20px;'>
+        <h2 style='color: #333;'>Bonne nouvelle!</h2>
+        <p>De nouveaux articles sont disponibles!</p>
+        <p>Pour plus de détails consulter notre plateforme.</p>
+      </td>
+    </tr>
+  </table>
+</body>
+`;
 SendMail(
 'mariem.marsaoui@esprit.tn',
 'Important de la part de RecycleConnect',
 '',
-'De nouvelles Catégories ont été ajoutées ! <br> Pour plus de détails, visitez notre plateforme !'
-);
+htmlString);
 return res.status(200).json(nouvcategorie);
 } catch (error) {
 console.error(error);
@@ -159,7 +170,6 @@ return res.status(200).json({ categories });
 return res.status(400).json({ message: 'Erreur !' });
 }
 }
-
 
 
 

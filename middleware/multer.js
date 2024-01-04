@@ -4,7 +4,7 @@ import { v2 as cloudinary } from 'cloudinary';
 
 const router = express.Router();
 
-/*cloudinary.config({
+cloudinary.config({
   cloud_name: 'dtrmseflh',
   api_key: '131837862865764',
   api_secret: '2AZTnmZx76uJSdpOsBGQMaMaV4Y',
@@ -32,9 +32,9 @@ res.status(500).json({ error: 'Error uploading to Cloudinary' });
 }
 });
 
-export default upload;*/
+export default upload;
 
-const storage = multer.diskStorage({
+/*const storage = multer.diskStorage({
 destination: function (req, file, cb) {
 cb(null, './uploads/'); // Specify the destination folder for uploaded files
 },
@@ -46,4 +46,4 @@ cb(null, Date.now() + '-' + fileName); // Use a unique filename
 
 const upload = multer({ storage: storage });
 
-export default upload;
+export default upload;*/

@@ -4,77 +4,32 @@ import cloudinary from '../middleware/cloudinary.js';
 
 // Create an event
 const eventsController = {
-  //  uploadToCloudinary : async (base64String) => {
-  //   try {
-  //     const result = await cloudinary.uploader.upload(`data:image/jpeg;base64,${base64String}`);
-  //     return result.secure_url;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // },
-  
-  //  event_create : async (req, res) => {
-  //   try {
-  //     const organizerId = "65948dd562e4576d2161278a"; // req.user.id waiting for auth middleware
-  
-  //     const organizer = await User.findById(organizerId);
-  //     if (!organizer || organizer.role !== 'organization') {
-  //       return res.status(403).json({ error: 'Unauthorized access' });
-  //     }
-  
-  //     const { nameEvent, descriptionEvent, addressEvent, startEvent, PhotoEvent } = req.body;
-  
-  //     if (!nameEvent || !descriptionEvent || !addressEvent || !startEvent || !PhotoEvent) {
-  //       return res.status(400).json({ error: 'All fields are required' });
-  //     }
-  
-  //     // Decode the base64 string and upload to Cloudinary
-  //     const photo = await eventsController.uploadToCloudinary(PhotoEvent);
-  
-  //     const event = new Event({
-  //       nameEvent,
-  //       descriptionEvent,
-  //       addressEvent,
-  //       startEvent,
-  //       PhotoEvent: photo,
-  //       organizer: organizerId,
-  //     });
-  
-  //     await event.save();
-  
-  //     res.status(201).json({ success: true, event });
-  //   } catch (error) {
-  //     console.error(error);
-  
-  //     if (error.name === 'ValidationError') {
-  //       const errors = Object.values(error.errors).map((err) => err.message);
-  //       return res.status(400).json({ error: errors });
-  //     }
-  
-  //     res.status(500).json({ error: 'Internal server error' });
-  //   }
-  // },
-  
-  event_create : async (req, res) => {
+   uploadToCloudinary : async (base64String) => {
     try {
-      const organizerId = '65948dd562e4576d2161278a'; // req.user.id waiting for auth middleware
+      const result = await cloudinary.uploader.upload(`data:image/jpeg;base64,${base64String}`);
+      return result.secure_url;
+    } catch (error) {
+      throw error;
+    }
+  },
+  
+   event_create : async (req, res) => {
+    try {
+      const organizerId = "65948dd562e4576d2161278a"; // req.user.id waiting for auth middleware
   
       const organizer = await User.findById(organizerId);
       if (!organizer || organizer.role !== 'organization') {
         return res.status(403).json({ error: 'Unauthorized access' });
       }
   
-      const { nameEvent, descriptionEvent, addressEvent, startEvent } = req.body;
+      const { nameEvent, descriptionEvent, addressEvent, startEvent, PhotoEvent } = req.body;
   
-      if (!nameEvent || !descriptionEvent || !addressEvent || !startEvent) {
+      if (!nameEvent || !descriptionEvent || !addressEvent || !startEvent || !PhotoEvent) {
         return res.status(400).json({ error: 'All fields are required' });
       }
   
-      // single photo
-      const photo = req.file
-        ? req.protocol + '://' + req.get('host') + '/uploads/' + req.file.filename
-        : '';
-  
+      // Decode the base64 string and upload to Cloudinary
+      const photo = await eventsController.uploadToCloudinary(PhotoEvent);
   
       const event = new Event({
         nameEvent,
@@ -99,6 +54,7 @@ const eventsController = {
       res.status(500).json({ error: 'Internal server error' });
     }
   },
+  
   
 
 // Retrieve all events
@@ -333,40 +289,6 @@ mark_going: async (req, res) => {
     });
   }
 },
-
-//update event  cordinates longitudeaddress and latitudeaddress
-update_cordinates: async (req, res) => {
-  try {
-    const eventId = req.params.id;
-    const { longitudeaddress, latitudeaddress } = req.body;
-
-    const event = await Event.findById(eventId);
-
-    if (!event) {
-      return res.status(404).json({
-        success: false,
-        message: 'Event not found',
-      });
-    }
-
-    event.longitudeaddress = longitudeaddress;
-    event.latitudeaddress = latitudeaddress;
-    await event.save();
-
-    res.status(200).json({
-      success: true,
-      message: 'Event cordinates updated successfully',
-    });
-  } catch (error) {
-    console.error(error);
-    // Handle other errors
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error',
-    });
-  }
-},
-
 
 
 
